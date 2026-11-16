@@ -366,151 +366,146 @@
 </section>
 </div>
 <script>
-  // Tactical micro-interactions for live terminal HUD
-  let currentLot = 2.12;
-
-  function adjustLot(delta) {
-    currentLot = parseFloat((currentLot + delta).toFixed(2));
-    const lotDisplay = document.getElementById('lot-display');
-    if (lotDisplay) {
-      lotDisplay.textContent = currentLot.toFixed(2) + ' LOTS';
+    // 1. LIVE CLOCK
+    function updateEATClock() {
+        const clockElement = document.getElementById('eat-live-clock');
+        if (!clockElement) return;
+        const now = new Date();
+        const utcHours = now.getUTCHours();
+        const eatHours = (utcHours + 3) % 24;
+        const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+        const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+        const hours = String(eatHours).padStart(2, '0');
+        clockElement.textContent = `EAT ${hours}:${minutes}:${seconds} NAIROBI (UTC+3)`;
     }
-  }
+    setInterval(updateEATClock, 1000);
 
-  // Live EAT Clock Tick Simulation
-  function updateEATClock() {
-    const clockElement = document.getElementById('eat-live-clock');
-    if (!clockElement) return;
+    // 2. LIVE PRICE & LOGIC ENGINE
+    const spotPriceElem = document.getElementById('live-spot-price');
+    let previousPrice = null; 
 
-    const now = new Date();
-    // Anchor to UTC+3 (Nairobi / EAT)
-    const utcHours = now.getUTCHours();
-    const eatHours = (utcHours + 3) % 24;
-    const minutes = String(now.getUTCMinutes()).padStart(2, '0');
-    const seconds = String(now.getUTCSeconds()).padStart(2, '0');
-    const hours = String(eatHours).padStart(2, '0');
+    if (spotPriceElem) {
+        setInterval(async () => {
+            try {
+                // Fetch from Render
+                const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
+                const response = await fetch(renderUrl);
+                const data = await response.json();
+                
+                // Calculate prices
+                const liveBid = parseFloat(data.current_price || data.price || "4586.11");
+                const liveAsk = liveBid + 0.20; // Simulated spread
+                
+                // Update Main Bid
+                spotPriceElem.textContent = liveBid.toFixed(2);
+                spotPriceElem.style.color = "#4cd7f6"; 
+                
+                // Update Ask Price
+                const askElem = document.getElementById('live-ask-price');
+                if (askElem) { askElem.textContent = liveAsk.toFixed(2); askElem.style.color = "#4cd7f6"; }
 
-    clockElement.textContent = `EAT ${hours}:${minutes}:${seconds} NAIROBI (UTC+3)`;
-  }
+                // Update Tactical Order Desk
+                const shortDeckElem = document.getElementById('short-deck-price');
+                const longDeckElem = document.getElementById('long-deck-price');
+                if (shortDeckElem) { shortDeckElem.textContent = liveBid.toFixed(2); shortDeckElem.style.color = "#4cd7f6"; }
+                if (longDeckElem) { longDeckElem.textContent = liveAsk.toFixed(2); longDeckElem.style.color = "#4cd7f6"; }
+                
+                // Update Magnet Levels
+                const resistanceElem = document.getElementById('resistance-level');
+                const asiaPeakElem = document.getElementById('asia-peak-level');
+                const ignitionElem = document.getElementById('ignition-level');
+                const nyTargetElem = document.getElementById('ny-target-level');
+                if (resistanceElem) resistanceElem.textContent = (liveBid + 30.50).toFixed(2);
+                if (asiaPeakElem) asiaPeakElem.textContent = (liveBid + 45.20).toFixed(2);
+                if (ignitionElem) ignitionElem.textContent = (liveBid + 10.15).toFixed(2);
+                if (nyTargetElem) nyTargetElem.textContent = (liveBid - 15.30).toFixed(2);
 
-  setInterval(updateEATClock, 1000);
+                // 3. THE BRAIN: Session Map & Bias Logic
+                const now = new Date();
+                const eatHours = (now.getUTCHours() + 3) % 24; 
+                
+                const londonElem = document.getElementById('london-status-text');
+                const nyElem = document.getElementById('ny-status-text');
+                
+                if (londonElem) {
+                    const isLondonActive = eatHours >= 11 && eatHours < 20;
+                    londonElem.textContent = isLondonActive ? "ACTIVE" : "CLOSED";
+                    londonElem.style.color = isLondonActive ? "#4cd7f6" : "#ffb4ab";
+                }
+                if (nyElem) {
+                    const isNYActive = eatHours >= 16 || eatHours < 1;
+                    nyElem.textContent = isNYActive ? "ACTIVE" : "CLOSED";
+                    nyElem.style.color = isNYActive ? "#4cd7f6" : "#ffb4ab";
+                }
 
-  // Fetch live data for the entire dashboard
-const spotPriceElem = document.getElementById('live-spot-price');
+                const trendElem = document.getElementById('m5-trend-text');
+                const biasElem = document.getElementById('net-bias-text');
+                const fsmElem = document.getElementById('fsm-status-text');
 
-if (spotPriceElem) {
-    let previousPrice = null;
-    setInterval(async () => {
-        try
-            // Fetch from Render
-            const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
-            const response = await fetch(renderUrl);
-            const data = await response.json();
-            
-            // Calculate prices
-            const liveBid = parseFloat(data.current_price || data.price || data.last_tick || "4586.11");
-            const liveAsk = liveBid + 0.20; // Simulated spread
-            
-            // 1. Update Main Bid
-            spotPriceElem.textContent = liveBid.toFixed(2);
-            spotPriceElem.style.color = "#4cd7f6"; 
-            
-            // 2. Update Ask Price
-            const askElem = document.getElementById('live-ask-price');
-            if (askElem) {
-                askElem.textContent = liveAsk.toFixed(2);
-                askElem.style.color = "#4cd7f6";
+                if (previousPrice !== null) {
+                    if (liveBid > previousPrice) {
+                        if (trendElem) { trendElem.textContent = "UPTREND"; trendElem.style.color = "#4cd7f6"; }
+                        if (biasElem) { biasElem.textContent = "BULLISH FLIP"; biasElem.style.color = "#4cd7f6"; }
+                        if (fsmElem) { fsmElem.textContent = "BUY1_ACTIVE"; fsmElem.style.color = "#4cd7f6"; }
+                    } else if (liveBid < previousPrice) {
+                        if (trendElem) { trendElem.textContent = "DOWNTREND"; trendElem.style.color = "#ffb4ab"; }
+                        if (biasElem) { biasElem.textContent = "BEARISH FLIP"; biasElem.style.color = "#ffb4ab"; }
+                        if (fsmElem) { fsmElem.textContent = "SELL1_ACTIVE"; fsmElem.style.color = "#ffb4ab"; }
+                    }
+                }
+                previousPrice = liveBid; 
+
+            } catch (error) {
+                console.error("Error fetching live data:", error);
+                if (spotPriceElem) spotPriceElem.style.color = "#ffb4ab";
             }
-
-            // 3. Update Tactical Order Desk (Short/Long)
-            const shortDeckElem = document.getElementById('short-deck-price');
-            const longDeckElem = document.getElementById('long-deck-price');
-            
-            if (shortDeckElem) {
-                shortDeckElem.textContent = liveBid.toFixed(2);
-                shortDeckElem.style.color = "#4cd7f6";
-            }
-            if (longDeckElem) {
-                longDeckElem.textContent = liveAsk.toFixed(2);
-                longDeckElem.style.color = "#4cd7f6";
-            }
-            // 4. Update Magnet Levels (Simulated relative to live price)
-const resistanceElem = document.getElementById('resistance-level');
-const asiaPeakElem = document.getElementById('asia-peak-level');
-const ignitionElem = document.getElementById('ignition-level');
-const nyTargetElem = document.getElementById('ny-target-level');
-
-if (resistanceElem) resistanceElem.textContent = (liveBid + 30.50).toFixed(2);
-if (asiaPeakElem) asiaPeakElem.textContent = (liveBid + 45.20).toFixed(2);
-if (ignitionElem) ignitionElem.textContent = (liveBid + 10.15).toFixed(2);
-if (nyTargetElem) nyTargetElem.textContent = (liveBid - 15.30).toFixed(2);
-            // 5. THE BRAIN: Live Session Map & Market Bias Logic
-const now = new Date();
-const eatHours = (now.getUTCHours() + 3) % 24; // EAT is UTC+3
-
-// --- Session Map Logic ---
-const londonElem = document.getElementById('london-status-text');
-const nyElem = document.getElementById('ny-status-text');
-
-if (londonElem) {
-    const isLondonActive = eatHours >= 11 && eatHours < 20;
-    londonElem.textContent = isLondonActive ? "ACTIVE" : "CLOSED";
-    londonElem.style.color = isLondonActive ? "#4cd7f6" : "#ffb4ab";
-}
-
-if (nyElem) {
-    const isNYActive = eatHours >= 16 || eatHours < 1;
-    nyElem.textContent = isNYActive ? "ACTIVE" : "CLOSED";
-    nyElem.style.color = isNYActive ? "#4cd7f6" : "#ffb4ab";
-}
-
-// --- Market Bias Logic ---
-const trendElem = document.getElementById('m5-trend-text');
-const biasElem = document.getElementById('net-bias-text');
-const fsmElem = document.getElementById('fsm-status-text');
-
-if (previousPrice !== null) {
-    if (liveBid > previousPrice) {
-        // Market is going UP
-        if (trendElem) { trendElem.textContent = "UPTREND"; trendElem.style.color = "#4cd7f6"; }
-        if (biasElem) { biasElem.textContent = "BULLISH FLIP"; biasElem.style.color = "#4cd7f6"; }
-        if (fsmElem) { fsmElem.textContent = "BUY1_ACTIVE"; fsmElem.style.color = "#4cd7f6"; }
-    } else if (liveBid < previousPrice) {
-        // Market is going DOWN
-        if (trendElem) { trendElem.textContent = "DOWNTREND"; trendElem.style.color = "#ffb4ab"; }
-        if (biasElem) { biasElem.textContent = "BEARISH FLIP"; biasElem.style.color = "#ffb4ab"; }
-        if (fsmElem) { fsmElem.textContent = "SELL1_ACTIVE"; fsmElem.style.color = "#ffb4ab"; }
+        }, 5000); 
     }
-}
-previousPrice = liveBid; // Store for next check
-        } catch (error) {
-            console.error("Error fetching live data:", error);
-            if (spotPriceElem) spotPriceElem.style.color = "#ffb4ab";
-        }
-    }, 5000); // Updates every 5 seconds
-}
-  // Button Feedback for tactical actions
-  const killBtn = document.getElementById('btn-emergency-kill');
-  if (killBtn) {
-    killBtn.addEventListener('click', () => {
-      const originalText = killBtn.innerHTML;
-      killBtn.innerHTML = '<span class="material-symbols-outlined text-[15px]">done_all</span> ALL CLOSED (0.00)';
-      killBtn.classList.add('bg-error', 'text-on-error');
-      setTimeout(() => {
-        killBtn.innerHTML = originalText;
-        killBtn.classList.remove('bg-error', 'text-on-error');
-      }, 2000);
-    });
-  }
 
-  const syncBtn = document.getElementById('btn-sync-feed');
-  if (syncBtn) {
-    syncBtn.addEventListener('click', () => {
-      const icon = syncBtn.querySelector('.material-symbols-outlined');
-      if (icon) icon.classList.add('animate-spin');
-      setTimeout(() => {
-        if (icon) icon.classList.remove('animate-spin');
-      }, 750);
-    });
-  }
-</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.8)]" data-active-classes="text-primary bg-surface-container-high/60 font-semibold"><div class="flex justify-around items-center h-16 px-space-xs"><a aria-current="page" class="flex flex-col items-center justify-center gap-space-xs h-12 w-20 rounded transition-all text-primary bg-surface-container-high/60 font-semibold" data-path="hud" href="#"><span class="material-symbols-outlined text-[20px]">radar</span><span class="font-label-mono-sm text-label-mono-sm tracking-wide uppercase">HUD</span></a><a class="flex flex-col items-center justify-center gap-space-xs h-12 w-20 rounded transition-all text-on-surface-variant hover:text-on-surface" data-path="engines" href="#"><span class="material-symbols-outlined text-[20px]">memory</span><span class="font-label-mono-sm text-label-mono-sm tracking-wide uppercase">Engines</span></a><a class="flex flex-col items-center justify-center gap-space-xs h-12 w-20 rounded transition-all text-on-surface-variant hover:text-on-surface" data-path="campaign" href="#"><span class="material-symbols-outlined text-[20px]">flag</span><span class="font-label-mono-sm text-label-mono-sm tracking-wide uppercase">Campaign</span></a><a class="flex flex-col items-center justify-center gap-space-xs h-12 w-20 rounded transition-all text-on-surface-variant hover:text-on-surface" data-path="recovery" href="#"><span class="material-symbols-outlined text-[20px]">restart_alt</span><span class="font-label-mono-sm text-label-mono-sm tracking-wide uppercase">Recovery</span></a></div></nav></body></html>
+    // 4. BUTTON INTERACTIONS
+    const killBtn = document.getElementById('btn-emergency-kill');
+    if (killBtn) {
+        killBtn.addEventListener('click', () => {
+            const originalText = killBtn.innerHTML;
+            killBtn.innerHTML = '<span class="material-symbols-outlined text-[15px]">emergency</span> KILLED';
+            killBtn.classList.add('bg-error', 'text-on-error');
+            setTimeout(() => {
+                killBtn.innerHTML = originalText;
+                killBtn.classList.remove('bg-error', 'text-on-error');
+            }, 2000);
+        });
+    }
+
+    const syncBtn = document.getElementById('btn-sync-feed');
+    if (syncBtn) {
+        syncBtn.addEventListener('click', () => {
+            const icon = syncBtn.querySelector('.material-symbols-outlined');
+            if (icon) icon.classList.add('animate-spin');
+            setTimeout(() => {
+                if (icon) icon.classList.remove('animate-spin');
+            }, 750);
+        });
+    }
+</script>
+</main>
+
+<nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container border-t border-outline-variant flex justify-around items-center px-space-xs pt-space-xs">
+    <a href="#" class="flex-1 flex flex-col items-center justify-center py-space-sm text-primary">
+        <span class="material-symbols-outlined mb-[2px] text-[20px]">radar</span>
+        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">HUD</span>
+    </a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined mb-[2px] text-[20px]">memory</span>
+        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Engines</span>
+    </a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined mb-[2px] text-[20px]">flag</span>
+        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Campaign</span>
+    </a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined mb-[2px] text-[20px]">restart_alt</span>
+        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Recovery</span>
+    </a>
+</nav>
+</body>
+</html>
