@@ -433,6 +433,8 @@ if (spotPriceElem) {
                 if (fsmElem && data.market_posture) { fsmElem.textContent = data.market_posture === "BUY" ? "BUY1_ACTIVE" : "SELL1_ACTIVE"; fsmElem.style.color = data.market_posture === "BUY" ? "#4cd7f6" : "#ffb4ab"; }
             }
 // --- Session Map Logic ---
+const now = new Date();
+const eatHours = (now.getUTCHours() + 3) % 24;
 const londonElem = document.getElementById('london-status-text');
 const nyElem = document.getElementById('ny-status-text');
 
