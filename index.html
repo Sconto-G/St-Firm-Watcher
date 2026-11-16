@@ -398,15 +398,11 @@
 if (spotPriceElem) {
     setInterval(async () => {
         try {
-            // We are using a free proxy to bypass the CORS block
-            const proxyUrl = "https://api.allorigins.win/get?url=";
-            const replitUrl = "https://e24bf9e2-b349-4e82-b688-839aa4250074-00-2ls4ksu7o9tbg.picard.replit.dev/api/v1/market/xauusd";
-            
-            const response = await fetch(proxyUrl + encodeURIComponent(replitUrl));
-            const rawData = await response.json();
-            
-            // Unpack the data from the proxy
-            const data = JSON.parse(rawData.contents);
+            // We are fetching directly from Render
+const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
+
+const response = await fetch(renderUrl);
+const data = await response.json();
             
             // Pull the real price (fallback to 4586 if the data isn't ready)
             const livePrice = data.current_price || data.price || data.last_tick || "4586.11"; 
