@@ -432,7 +432,30 @@ if (spotPriceElem) {
                 if (biasElem) { biasElem.textContent = m5.bias + " FLIP"; biasElem.style.color = m5.bias === "BULLISH" ? "#4cd7f6" : "#ffb4ab"; }
                 if (fsmElem && data.market_posture) { fsmElem.textContent = data.market_posture === "BUY" ? "BUY1_ACTIVE" : "SELL1_ACTIVE"; fsmElem.style.color = data.market_posture === "BUY" ? "#4cd7f6" : "#ffb4ab"; }
             }
+// --- Session Map Logic ---
+const londonElem = document.getElementById('london-status-text');
+const nyElem = document.getElementById('ny-status-text');
 
+// London: 11:00 - 20:00 EAT
+if (londonElem) {
+    const isLondonActive = eatHours >= 11 && eatHours < 20;
+    londonElem.textContent = isLondonActive ? "ACTIVE" : "CLOSED";
+    londonElem.style.color = isLondonActive ? "#4cd7f6" : "#ffb4ab";
+}
+
+// New York: 16:00 - 01:00 EAT
+if (nyElem) {
+    const isNYActive = eatHours >= 16 || eatHours < 1;
+    nyElem.textContent = isNYActive ? "ACTIVE" : "CLOSED";
+    
+    if (isNYActive) {
+        nyElem.style.color = "#4cd7f6"; 
+        nyElem.style.backgroundColor = "rgba(76, 215, 246, 0.1)";
+    } else {
+        nyElem.style.color = "#ffb4ab";
+        nyElem.style.backgroundColor = "transparent";
+    }
+}
             // 3. Update Magnet Levels
             const resistanceElem = document.getElementById('resistance-level');
             const asiaPeakElem = document.getElementById('asia-peak-level');
