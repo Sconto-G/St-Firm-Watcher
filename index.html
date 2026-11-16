@@ -433,7 +433,16 @@ if (spotPriceElem) {
                 longDeckElem.textContent = liveAsk.toFixed(2);
                 longDeckElem.style.color = "#4cd7f6";
             }
-            
+            // 4. Update Magnet Levels (Simulated relative to live price)
+const resistanceElem = document.getElementById('resistance-level');
+const asiaPeakElem = document.getElementById('asia-peak-level');
+const ignitionElem = document.getElementById('ignition-level');
+const nyTargetElem = document.getElementById('ny-target-level');
+
+if (resistanceElem) resistanceElem.textContent = (liveBid + 30.50).toFixed(2);
+if (asiaPeakElem) asiaPeakElem.textContent = (liveBid + 45.20).toFixed(2);
+if (ignitionElem) ignitionElem.textContent = (liveBid + 10.15).toFixed(2);
+if (nyTargetElem) nyTargetElem.textContent = (liveBid - 15.30).toFixed(2);
         } catch (error) {
             console.error("Error fetching live data:", error);
             if (spotPriceElem) spotPriceElem.style.color = "#ffb4ab";
