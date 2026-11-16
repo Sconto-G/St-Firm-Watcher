@@ -381,111 +381,100 @@
     setInterval(updateEATClock, 1000);
 
     // 2. LIVE PRICE & LOGIC ENGINE
-    const spotPriceElem = document.getElementById('live-spot-price');
-    let previousPrice = null; 
+const spotPriceElem = document.getElementById('live-spot-price');
 
-    if (spotPriceElem) {
-        setInterval(async () => {
-            try {
-                // Fetch from Render
-                const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
-                const response = await fetch(renderUrl);
-                const data = await response.json();
-                
-                // Calculate prices
-                const liveBid = parseFloat(data.current_price || data.price || "4586.11");
-                const liveAsk = liveBid + 0.20; // Simulated spread
-                
-                // Update Main Bid
-                spotPriceElem.textContent = liveBid.toFixed(2);
-                spotPriceElem.style.color = "#4cd7f6"; 
-                
-                // Update Ask Price
-                const askElem = document.getElementById('live-ask-price');
-                if (askElem) { askElem.textContent = liveAsk.toFixed(2); askElem.style.color = "#4cd7f6"; }
+if (spotPriceElem) {
+    setInterval(async () => {
+        try {
+            // Fetch from Render
+            const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
+            const response = await fetch(renderUrl);
+            const data = await response.json();
+            
+            // 1. Update Prices
+            const liveBid = parseFloat(data.current_price || "4586.11");
+            const liveAsk = liveBid + 0.20;
+            
+            spotPriceElem.textContent = liveBid.toFixed(2);
+            spotPriceElem.style.color = "#4cd7f6"; 
+            
+            const askElem = document.getElementById('live-ask-price');
+            if (askElem) { askElem.textContent = liveAsk.toFixed(2); askElem.style.color = "#4cd7f6"; }
 
-                // Update Tactical Order Desk
-                const shortDeckElem = document.getElementById('short-deck-price');
-                const longDeckElem = document.getElementById('long-deck-price');
-                if (shortDeckElem) { shortDeckElem.textContent = liveBid.toFixed(2); shortDeckElem.style.color = "#4cd7f6"; }
-                if (longDeckElem) { longDeckElem.textContent = liveAsk.toFixed(2); longDeckElem.style.color = "#4cd7f6"; }
-                
-                // Update Magnet Levels
-                const resistanceElem = document.getElementById('resistance-level');
-                const asiaPeakElem = document.getElementById('asia-peak-level');
-                const ignitionElem = document.getElementById('ignition-level');
-                const nyTargetElem = document.getElementById('ny-target-level');
-                if (resistanceElem) resistanceElem.textContent = (liveBid + 30.50).toFixed(2);
-                if (asiaPeakElem) asiaPeakElem.textContent = (liveBid + 45.20).toFixed(2);
-                if (ignitionElem) ignitionElem.textContent = (liveBid + 10.15).toFixed(2);
-                if (nyTargetElem) nyTargetElem.textContent = (liveBid - 15.30).toFixed(2);
+            const shortDeckElem = document.getElementById('short-deck-price');
+            const longDeckElem = document.getElementById('long-deck-price');
+            if (shortDeckElem) { shortDeckElem.textContent = liveBid.toFixed(2); shortDeckElem.style.color = "#4cd7f6"; }
+            if (longDeckElem) { longDeckElem.textContent = liveAsk.toFixed(2); longDeckElem.style.color = "#4cd7f6"; }
 
-                // 3. THE BRAIN: Session Map & Bias Logic
-                const now = new Date();
-                const eatHours = (now.getUTCHours() + 3) % 24; 
-                
-                const londonElem = document.getElementById('london-status-text');
-                const nyElem = document.getElementById('ny-status-text');
-                
-                if (londonElem) {
-                    const isLondonActive = eatHours >= 11 && eatHours < 20;
-                    londonElem.textContent = isLondonActive ? "ACTIVE" : "CLOSED";
-                    londonElem.style.color = isLondonActive ? "#4cd7f6" : "#ffb4ab";
+            // 2. Update the Brain Output (Posture & Confidence)
+            const postureElem = document.getElementById('market-posture-text');
+            const confidenceElem = document.getElementById('confidence-text');
+            const biasElem = document.getElementById('net-bias-text');
+            const trendElem = document.getElementById('m5-trend-text');
+            const fsmElem = document.getElementById('fsm-status-text');
+
+            if (postureElem && data.market_posture) {
+                postureElem.textContent = data.market_posture;
+                if (data.market_posture === "BUY") {
+                    postureElem.style.color = "#4cd7f6"; // Blue for buy
+                } else if (data.market_posture === "SELL") {
+                    postureElem.style.color = "#ffb4ab"; // Red for sell
                 }
-                if (nyElem) {
-                    const isNYActive = eatHours >= 16 || eatHours < 1;
-                    nyElem.textContent = isNYActive ? "ACTIVE" : "CLOSED";
-                    nyElem.style.color = isNYActive ? "#4cd7f6" : "#ffb4ab";
-                }
-
-                const trendElem = document.getElementById('m5-trend-text');
-                const biasElem = document.getElementById('net-bias-text');
-                const fsmElem = document.getElementById('fsm-status-text');
-
-                if (previousPrice !== null) {
-                    if (liveBid > previousPrice) {
-                        if (trendElem) { trendElem.textContent = "UPTREND"; trendElem.style.color = "#4cd7f6"; }
-                        if (biasElem) { biasElem.textContent = "BULLISH FLIP"; biasElem.style.color = "#4cd7f6"; }
-                        if (fsmElem) { fsmElem.textContent = "BUY1_ACTIVE"; fsmElem.style.color = "#4cd7f6"; }
-                    } else if (liveBid < previousPrice) {
-                        if (trendElem) { trendElem.textContent = "DOWNTREND"; trendElem.style.color = "#ffb4ab"; }
-                        if (biasElem) { biasElem.textContent = "BEARISH FLIP"; biasElem.style.color = "#ffb4ab"; }
-                        if (fsmElem) { fsmElem.textContent = "SELL1_ACTIVE"; fsmElem.style.color = "#ffb4ab"; }
-                    }
-                }
-                previousPrice = liveBid; 
-
-            } catch (error) {
-                console.error("Error fetching live data:", error);
-                if (spotPriceElem) spotPriceElem.style.color = "#ffb4ab";
             }
-        }, 5000); 
-    }
 
-    // 4. BUTTON INTERACTIONS
-    const killBtn = document.getElementById('btn-emergency-kill');
-    if (killBtn) {
-        killBtn.addEventListener('click', () => {
-            const originalText = killBtn.innerHTML;
-            killBtn.innerHTML = '<span class="material-symbols-outlined text-[15px]">emergency</span> KILLED';
-            killBtn.classList.add('bg-error', 'text-on-error');
-            setTimeout(() => {
-                killBtn.innerHTML = originalText;
-                killBtn.classList.remove('bg-error', 'text-on-error');
-            }, 2000);
-        });
-    }
+            if (confidenceElem && data.confidence !== undefined) {
+                confidenceElem.textContent = data.confidence + "%";
+            }
 
-    const syncBtn = document.getElementById('btn-sync-feed');
-    if (syncBtn) {
-        syncBtn.addEventListener('click', () => {
-            const icon = syncBtn.querySelector('.material-symbols-outlined');
-            if (icon) icon.classList.add('animate-spin');
-            setTimeout(() => {
-                if (icon) icon.classList.remove('animate-spin');
-            }, 750);
-        });
-    }
+            if (data.timeframes && data.timeframes.M5) {
+                const m5 = data.timeframes.M5;
+                if (trendElem) { trendElem.textContent = m5.trend; trendElem.style.color = m5.trend === "UPTREND" ? "#4cd7f6" : "#ffb4ab"; }
+                if (biasElem) { biasElem.textContent = m5.bias + " FLIP"; biasElem.style.color = m5.bias === "BULLISH" ? "#4cd7f6" : "#ffb4ab"; }
+                if (fsmElem && data.market_posture) { fsmElem.textContent = data.market_posture === "BUY" ? "BUY1_ACTIVE" : "SELL1_ACTIVE"; fsmElem.style.color = data.market_posture === "BUY" ? "#4cd7f6" : "#ffb4ab"; }
+            }
+
+            // 3. Update Magnet Levels
+            const resistanceElem = document.getElementById('resistance-level');
+            const asiaPeakElem = document.getElementById('asia-peak-level');
+            const ignitionElem = document.getElementById('ignition-level');
+            const nyTargetElem = document.getElementById('ny-target-level');
+            if (resistanceElem) resistanceElem.textContent = (liveBid + 30.50).toFixed(2);
+            if (asiaPeakElem) asiaPeakElem.textContent = (liveBid + 45.20).toFixed(2);
+            if (ignitionElem) ignitionElem.textContent = (liveBid + 10.15).toFixed(2);
+            if (nyTargetElem) nyTargetElem.textContent = (liveBid - 15.30).toFixed(2);
+
+        } catch (error) {
+            console.error("Error fetching live data:", error);
+            if (spotPriceElem) spotPriceElem.style.color = "#ffb4ab";
+        }
+    }, 5000); 
+}
+
+// 3. BUTTON INTERACTIONS
+const killBtn = document.getElementById('btn-emergency-kill');
+if (killBtn) {
+    killBtn.addEventListener('click', () => {
+        const originalText = killBtn.innerHTML;
+        killBtn.innerHTML = '<span class="material-symbols-outlined text-[15px]">emergency</span> KILLED';
+        killBtn.classList.add('bg-error', 'text-on-error');
+        setTimeout(() => {
+            killBtn.innerHTML = originalText;
+            killBtn.classList.remove('bg-error', 'text-on-error');
+        }, 2000);
+    });
+}
+
+const syncBtn = document.getElementById('btn-sync-feed');
+if (syncBtn) {
+    syncBtn.addEventListener('click', () => {
+        const icon = syncBtn.querySelector('.material-symbols-outlined');
+        if (icon) icon.classList.add('animate-spin');
+        setTimeout(() => {
+            if (icon) icon.classList.remove('animate-spin');
+        }, 750);
+    });
+}
+    
 </script>
 </main>
 
