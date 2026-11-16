@@ -467,7 +467,16 @@ if (nyElem) {
             if (asiaPeakElem) asiaPeakElem.textContent = (liveBid + 45.20).toFixed(2);
             if (ignitionElem) ignitionElem.textContent = (liveBid + 10.15).toFixed(2);
             if (nyTargetElem) nyTargetElem.textContent = (liveBid - 15.30).toFixed(2);
+// 4. Update H4 & D1 Ranges (Simulated to move with live price)
+const h4HighElem = document.getElementById('h4-high');
+const h4LowElem = document.getElementById('h4-low');
+const d1HighElem = document.getElementById('d1-high');
+const d1LowElem = document.getElementById('d1-low');
 
+if (h4HighElem) h4HighElem.textContent = (liveBid + 24.15).toFixed(2);
+if (h4LowElem) h4LowElem.textContent = (liveBid - 12.80).toFixed(2);
+if (d1HighElem) d1HighElem.textContent = (liveBid + 45.30).toFixed(2);
+if (d1LowElem) d1LowElem.textContent = (liveBid - 35.10).toFixed(2);
         } catch (error) {
             console.error("Error fetching live data:", error);
             if (spotPriceElem) spotPriceElem.style.color = "#ffb4ab";
