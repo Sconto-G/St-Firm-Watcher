@@ -1,436 +1,491 @@
 <!DOCTYPE html>
 
 <html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#0f141c;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..900&family=Space+Grotesk:wght@100..900&display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "error-container": "#93000a", "secondary-fixed-dim": "#4cd7f6", "surface-container-lowest": "#090e16", "error": "#ffb4ab", "on-primary-container": "#613b00", "primary-container": "#f59e0b", "on-primary": "#472a00", "inverse-surface": "#dee2ee", "surface": "#0f141c", "primary": "#ffc174", "surface-bright": "#343942", "on-secondary-fixed": "#001f26", "primary-fixed": "#ffddb8", "outline-variant": "#534434", "surface-tint": "#ffb95f", "on-tertiary-container": "#004e34", "tertiary-fixed": "#6ffbbe", "background": "#0f141c", "surface-container-highest": "#30353e", "on-error-container": "#ffdad6", "surface-variant": "#30353e", "surface-container-low": "#171c24", "tertiary-container": "#30c88f", "inverse-on-surface": "#2c3139", "primary-fixed-dim": "#ffb95f", "on-secondary-fixed-variant": "#004e5c", "on-secondary-container": "#00424e", "tertiary-fixed-dim": "#4edea3", "surface-container": "#1b2028", "on-tertiary-fixed": "#002113", "on-surface-variant": "#d8c3ad", "on-tertiary": "#003824", "on-error": "#690005", "surface-container-high": "#252a33", "on-surface": "#dee2ee", "on-primary-fixed-variant": "#653e00", "surface-dim": "#0f141c", "tertiary": "#56e5a9", "on-primary-fixed": "#2a1700", "inverse-primary": "#855300", "secondary": "#4cd7f6", "on-secondary": "#003640", "on-tertiary-fixed-variant": "#005236", "secondary-fixed": "#acedff", "outline": "#a08e7a", "on-background": "#dee2ee", "secondary-container": "#03b5d3" }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, spacing: { "space-xs": "0.125rem", "margin": "0.75rem", "space-lg": "0.75rem", "space-sm": "0.25rem", "space-md": "0.5rem", "space-xl": "1rem", "gutter": "0.5rem" }, fontFamily: { "headline-xl-mobile": ["Space Grotesk"], "data-mono-lg": ["JetBrains Mono"], "headline-lg": ["Space Grotesk"], "data-mono-md": ["JetBrains Mono"], "body-sm": ["Geist"], "title-md": ["Space Grotesk"], "body-md": ["Geist"], "badge-mono-xs": ["JetBrains Mono"], "headline-xl": ["Space Grotesk"], "label-mono-sm": ["JetBrains Mono"], "data-mono-xl": ["JetBrains Mono"] }, fontSize: { "headline-xl-mobile": ["26px", { lineHeight: "32px", fontWeight: "700" }], "data-mono-lg": ["18px", { lineHeight: "24px", fontWeight: "600" }], "headline-lg": ["22px", { lineHeight: "28px", fontWeight: "700" }], "data-mono-md": ["13px", { lineHeight: "18px", fontWeight: "500" }], "body-sm": ["11px", { lineHeight: "15px", fontWeight: "400" }], "title-md": ["16px", { lineHeight: "22px", fontWeight: "600" }], "body-md": ["13px", { lineHeight: "18px", fontWeight: "400" }], "badge-mono-xs": ["9px", { lineHeight: "12px", fontWeight: "700" }], "headline-xl": ["32px", { lineHeight: "38px", fontWeight: "700" }], "label-mono-sm": ["10px", { lineHeight: "14px", fontWeight: "600" }], "data-mono-xl": ["28px", { lineHeight: "32px", fontWeight: "700" }] } } } };</script><style>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;family=Space+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "error-container": "#93000a", "secondary-fixed-dim": "#4cd7f6", "surface-container-lowest": "#090e16", "error": "#ffb4ab", "on-primary-container": "#613b00", "primary-container": "#f59e0b", "on-primary": "#472a00", "inverse-surface": "#dee2ee", "surface": "#0f141c", "primary": "#ffc174", "surface-bright": "#343942", "on-secondary-fixed": "#001f26", "primary-fixed": "#ffddb8", "outline-variant": "#534434", "surface-tint": "#ffb95f", "on-tertiary-container": "#004e34", "tertiary-fixed": "#6ffbbe", "background": "#0f141c", "surface-container-highest": "#30353e", "on-error-container": "#ffdad6", "surface-variant": "#30353e", "surface-container-low": "#171c24", "tertiary-container": "#30c88f", "inverse-on-surface": "#2c3139", "primary-fixed-dim": "#ffb95f", "on-secondary-fixed-variant": "#004e5c", "on-secondary-container": "#00424e", "tertiary-fixed-dim": "#4edea3", "surface-container": "#1b2028", "on-tertiary-fixed": "#002113", "on-surface-variant": "#d8c3ad", "on-tertiary": "#003824", "on-error": "#690005", "surface-container-high": "#252a33", "on-surface": "#dee2ee", "on-primary-fixed-variant": "#653e00", "surface-dim": "#0f141c", "tertiary": "#56e5a9", "on-primary-fixed": "#2a1700", "inverse-primary": "#855300", "secondary": "#4cd7f6", "on-secondary": "#003640", "on-tertiary-fixed-variant": "#005236", "secondary-fixed": "#acedff", "outline": "#a08e7a", "on-background": "#dee2ee", "secondary-container": "#03b5d3" }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, spacing: { "space-xs": "0.125rem", "margin": "0.75rem", "space-lg": "0.75rem", "space-sm": "0.25rem", "space-md": "0.5rem", "space-xl": "1rem", "gutter": "0.5rem" }, fontFamily: { "headline-xl-mobile": ["Space Grotesk"], "data-mono-lg": ["JetBrains Mono"], "headline-lg": ["Space Grotesk"], "data-mono-md": ["JetBrains Mono"], "body-sm": ["Geist"], "title-md": ["Space Grotesk"], "body-md": ["Geist"], "badge-mono-xs": ["JetBrains Mono"], "headline-xl": ["Space Grotesk"], "label-mono-sm": ["JetBrains Mono"], "data-mono-xl": ["JetBrains Mono"] }, fontSize: { "headline-xl-mobile": ["26px", { lineHeight: "32px", fontWeight: "700" }], "data-mono-lg": ["18px", { lineHeight: "24px", fontWeight: "600" }], "headline-lg": ["22px", { lineHeight: "28px", fontWeight: "700" }], "data-mono-md": ["13px", { lineHeight: "18px", fontWeight: "500" }], "body-sm": ["11px", { lineHeight: "15px", fontWeight: "400" }], "title-md": ["16px", { lineHeight: "22px", fontWeight: "600" }], "body-md": ["13px", { lineHeight: "18px", fontWeight: "400" }], "badge-mono-xs": ["9px", { lineHeight: "12px", fontWeight: "700" }], "headline-xl": ["32px", { lineHeight: "38px", fontWeight: "700" }], "label-mono-sm": ["10px", { lineHeight: "14px", fontWeight: "600" }], "data-mono-xl": ["28px", { lineHeight: "32px", fontWeight: "700" }] } } } };</script><style>
     body {
       min-height: max(884px, 100dvh);
     }
   </style>
-  </head><body class="bg-surface text-on-surface font-body-md text-body-md flex flex-col min-h-screen selection:bg-primary-container selection:text-on-primary-container"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/95 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.65)]"><div class="h-24 px-margin flex flex-col justify-between py-space-sm"><div class="flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><img alt="ST-FIRM Watcher Emblem" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrBo3qTt8n_TnEzr0085KzpQsAOtWUK_38CJSF3Ys2D03h8Je2ZaLfY3Dpjuz3Z5FsWKiDwUd-1sh1kDbfjaQexFQ2IurjUhNCOreHGGOoZ2qy9-KTda7Bhv2JSywOkSz4uEVAI90FGd9oVmwIBpFOEGiyEL59Lc46O0x9a7wKlLFkhyYJMqj59KvGZE3ksKPEVAYvK2pDP9pt8QDTERxINRrYcxVH9KFMzM6HBNpW5_"/><div class="flex flex-col"><div class="flex items-center gap-space-sm"><span class="font-headline-lg text-title-md tracking-wider text-primary uppercase leading-none">ST-FIRM WATCHER</span><span class="font-badge-mono-xs text-badge-mono-xs px-space-xs py-[1px] bg-primary-container/20 text-primary-fixed rounded tracking-tight">XAUUSD</span></div><div class="flex items-center gap-space-xs mt-[2px]"><span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase tracking-wider">EAT (UTC+3) NAIROBI</span><span class="font-badge-mono-xs text-badge-mono-xs text-secondary font-semibold">• Engines</span></div></div></div><div class="flex items-center gap-space-sm"><div class="flex items-center gap-space-xs px-space-sm py-[2px] rounded bg-surface-container-high"><span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span><span class="font-label-mono-sm text-label-mono-sm text-tertiary-fixed tracking-tight">LIVE</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div><div class="flex items-center justify-between gap-space-sm pt-space-xs"><div class="flex items-center gap-space-xs bg-surface-container-lowest/80 px-space-sm py-[3px] rounded"><span class="w-1.5 h-1.5 rounded-full bg-tertiary shadow-[0_0_6px_rgba(86,229,169,0.8)]"></span><span class="font-label-mono-sm text-label-mono-sm text-on-surface font-medium truncate max-w-[170px]">MT5 CONNECTED • PEPPERSTONE BRIDGE</span></div><div class="flex items-center gap-space-sm bg-surface-container-high/90 px-space-sm py-[3px] rounded"><span class="font-badge-mono-xs text-badge-mono-xs text-secondary-fixed font-bold tracking-wider uppercase">LONDON / EAT: 11:30</span><span class="font-data-mono-md text-data-mono-md text-primary font-bold tracking-tight">2384.60</span></div></div></div></header><main class="flex flex-col relative w-full pt-24 pb-20 px-margin bg-surface flex-grow min-h-screen"><div class="flex flex-col w-full gap-space-md">
-<!-- EAT Session Sync & Active Status Banner -->
-<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col gap-space-xs shadow-md">
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md flex flex-col min-h-screen selection:bg-primary-container selection:text-on-primary-container"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/95 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.65)]"><div class="h-24 px-margin flex flex-col justify-between py-space-sm"><div class="flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><img alt="ST-FIRM Watcher Emblem" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrBo3qTt8n_TnEzr0085KzpQsAOtWUK_38CJSF3Ys2D03h8Je2ZaLfY3Dpjuz3Z5FsWKiDwUd-1sh1kDbfjaQexFQ2IurjUhNCOreHGGOoZ2qy9-KTda7Bhv2JSywOkSz4uEVAI90FGd9oVmwIBpFOEGiyEL59Lc46O0x9a7wKlLFkhyYJMqj59KvGZE3ksKPEVAYvK2pDP9pt8QDTERxINRrYcxVH9KFMzM6HBNpW5_"/><div class="flex flex-col"><div class="flex items-center gap-space-sm"><span class="font-headline-lg text-title-md tracking-wider text-primary uppercase leading-none">ST-FIRM WATCHER</span><span class="font-badge-mono-xs text-badge-mono-xs px-space-xs py-[1px] bg-primary-container/20 text-primary-fixed rounded tracking-tight">XAUUSD</span></div><div class="flex items-center gap-space-xs mt-[2px]"><span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase tracking-wider">EAT (UTC+3) NAIROBI</span><span class="font-badge-mono-xs text-badge-mono-xs text-secondary font-semibold">• Engines</span></div></div></div><div class="flex items-center gap-space-sm"><div class="flex items-center gap-space-xs px-space-sm py-[2px] rounded bg-surface-container-high"><span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span><span class="font-label-mono-sm text-label-mono-sm text-tertiary-fixed tracking-tight">LIVE</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div><div class="flex items-center justify-between gap-space-sm pt-space-xs"><div class="flex items-center gap-space-xs bg-surface-container-lowest/80 px-space-sm py-[3px] rounded"><span class="w-1.5 h-1.5 rounded-full bg-tertiary shadow-[0_0_6px_rgba(86,229,169,0.8)]"></span><span class="font-label-mono-sm text-label-mono-sm text-on-surface font-medium truncate max-w-[170px]">MT5 CONNECTED • PEPPERSTONE BRIDGE</span></div><div class="flex items-center gap-space-sm bg-surface-container-high/90 px-space-sm py-[3px] rounded"><span class="font-badge-mono-xs text-badge-mono-xs text-secondary-fixed font-bold tracking-wider uppercase">LONDON / EAT: 11:30</span><span class="font-data-mono-md text-data-mono-md text-primary font-bold tracking-tight">2384.60</span></div></div></div></header><main class="flex flex-col relative w-full pt-24 pb-20 px-margin bg-surface flex-grow min-h-screen"><div class="flex flex-col w-full space-y-space-md text-on-surface">
+<!-- ========================================== -->
+<!-- 1. TELEMETRY & HARDWARE STRIP (V8 & BRIDGE) -->
+<!-- ========================================== -->
+<div class="flex flex-col gap-space-sm bg-surface-container-lowest p-space-md rounded-xl shadow-md">
+<!-- Top Telemetry Row -->
+<div class="flex items-center justify-between gap-space-sm flex-wrap">
+<!-- Shield / Crown Emblem + Engine Subtitle -->
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="relative flex items-center justify-center w-7 h-7 rounded bg-primary-container/20 text-primary shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
+<svg class="w-4 h-4 fill-current text-primary" viewbox="0 0 24 24">
+<path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"></path>
+</svg>
+<span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_6px_rgba(76,215,246,0.9)] animate-ping"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs truncate">
+<span class="font-headline-lg text-title-md text-primary tracking-wide font-bold">V8 TWIN-TURBO</span>
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs py-[1px] rounded bg-surface-container-high text-secondary-fixed font-semibold">PIT-WALL v4.2</span>
+</div>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant truncate">EAT UTC+3 OVERLAP GATEWAY • NAIROBI</span>
+</div>
+</div>
+<!-- Turbo Status Pill + Overdrive Trigger -->
+<div class="flex items-center gap-space-xs shrink-0">
+<div class="flex items-center gap-space-xs px-space-sm py-[3px] rounded bg-surface-container-high">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(86,229,169,0.8)] animate-pulse"></span>
+<span class="font-label-mono-sm text-label-mono-sm text-tertiary-fixed font-bold">850 BHP @ 7,200 RPM</span>
+</div>
+<button class="flex items-center gap-space-xs px-space-sm py-[3px] rounded bg-secondary-container/20 text-secondary hover:bg-secondary-container/30 transition-all cursor-pointer" id="nitrousBtn">
+<span class="material-symbols-outlined text-[13px] text-secondary">bolt</span>
+<span class="font-badge-mono-xs text-badge-mono-xs font-bold tracking-wider uppercase">BOOST 1.8 BAR</span>
+</button>
+</div>
+</div>
+<!-- Institutional Telemetry Network Sub-Bar -->
+<div class="flex items-center justify-between gap-space-sm flex-wrap pt-space-xs bg-surface-container-low px-space-sm py-[4px] rounded">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary shrink-0 shadow-[0_0_5px_rgba(86,229,169,0.9)]"></span>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface truncate">MT5 CONNECTED • PEPPERSTONE BRIDGE 9MS • FIX LATENCY 11ms</span>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-mono-sm text-label-mono-sm text-primary">🛡️</span>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">SHIELD:</span>
+<span class="font-badge-mono-xs text-badge-mono-xs text-tertiary-fixed px-space-xs bg-surface-container-highest rounded font-bold">CLEAR (2h 14m to US CPI)</span>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- 2. CORE METRICS COCKPIT GRID               -->
+<!-- ========================================== -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-sm">
+<!-- Spot Gold Main Quotation Card -->
+<div class="flex flex-col justify-between bg-surface-container-lowest p-space-md rounded-xl shadow-md relative overflow-hidden">
+<div class="absolute -right-6 -bottom-6 w-24 h-24 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-space-xs">
-<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(86,229,169,0.9)] animate-pulse"></span>
-<span class="font-headline-lg text-title-md text-primary tracking-wide uppercase">XAU/USD EXECUTION ENGINES</span>
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs py-[2px] rounded bg-primary-container/20 text-primary-fixed font-bold tracking-wider">SPOT GOLD</span>
+<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant font-medium">XAU/USD M1</span>
 </div>
-<span class="font-badge-mono-xs text-badge-mono-xs bg-tertiary-container/20 text-tertiary px-space-sm py-[2px] rounded-full uppercase tracking-wider font-bold">ACTIVE SESSION</span>
-</div>
-<div class="flex items-center justify-between text-on-surface-variant">
-<span class="font-label-mono-sm text-label-mono-sm tracking-tight">EAT CLOCK: <span class="text-on-surface font-semibold text-secondary" id="eat-live-clock">11:34:18 EAT</span> (UTC+3)</span>
-<span class="font-label-mono-sm text-label-mono-sm tracking-tight text-primary-fixed">BRIDGE FIX 4.4 • LATENCY 11ms</span>
-</div>
-</div>
-<!-- Session Engine Selector Tabs -->
-<div class="grid grid-cols-3 gap-space-xs bg-surface-container-low p-space-xs rounded-xl">
-<button class="engine-tab py-space-sm px-space-xs rounded flex flex-col items-center justify-center transition-all bg-transparent text-on-surface-variant hover:text-on-surface" id="tab-asia" onclick="selectEngine('engine-asia')" type="button">
-<span class="font-badge-mono-xs text-badge-mono-xs tracking-wider uppercase opacity-75">ENGINE 1</span>
-<span class="font-title-md text-title-md tracking-tight uppercase leading-tight">ASIA</span>
-<span class="font-label-mono-sm text-label-mono-sm text-error/80 font-semibold mt-space-xs">03:00–08:00</span>
-</button>
-<button class="engine-tab py-space-sm px-space-xs rounded flex flex-col items-center justify-center transition-all bg-surface-container-high text-primary shadow-sm" id="tab-london" onclick="selectEngine('engine-london')" type="button">
 <div class="flex items-center gap-space-xs">
-<span class="w-1.5 h-1.5 rounded-full bg-tertiary shadow-[0_0_6px_rgba(86,229,169,1)]"></span>
-<span class="font-badge-mono-xs text-badge-mono-xs tracking-wider uppercase text-tertiary font-bold">ACTIVE</span>
-</div>
-<span class="font-title-md text-title-md tracking-tight uppercase text-primary font-bold leading-tight">LONDON</span>
-<span class="font-label-mono-sm text-label-mono-sm text-tertiary-fixed font-semibold mt-space-xs">11:00–20:00</span>
-</button>
-<button class="engine-tab py-space-sm px-space-xs rounded flex flex-col items-center justify-center transition-all bg-transparent text-on-surface-variant hover:text-on-surface" id="tab-ny" onclick="selectEngine('engine-ny')" type="button">
-<span class="font-badge-mono-xs text-badge-mono-xs tracking-wider uppercase opacity-75">ENGINE 3</span>
-<span class="font-title-md text-title-md tracking-tight uppercase leading-tight">NEW YORK</span>
-<span class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold mt-space-xs">16:00–01:00</span>
-</button>
-</div>
-<!-- ACTIVE ENGINE 2: LONDON BUY PROGRAM (DEFAULT SPOTLIGHT) -->
-<section class="engine-card flex flex-col gap-space-md" id="engine-london">
-<!-- Header Container -->
-<div class="bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col gap-space-sm">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-space-sm">
-<div class="w-7 h-7 rounded bg-tertiary/20 flex items-center justify-center text-tertiary shadow-[0_0_10px_rgba(86,229,169,0.3)]">
-<span class="material-symbols-outlined text-[18px]">trending_up</span>
-</div>
-<div>
-<div class="flex items-center gap-space-xs">
-<span class="font-headline-lg text-title-md text-tertiary uppercase">ENGINE 2: LONDON</span>
-<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs py-[1px] bg-tertiary text-on-tertiary font-bold rounded">IN PLAY</span>
-</div>
-<p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">11:00 – 20:00 EAT (UTC+3)</p>
+<span class="w-1.5 h-1.5 rounded-full bg-error shadow-[0_0_5px_rgba(255,180,171,0.8)]"></span>
+<span class="font-data-mono-md text-data-mono-md text-error font-bold">-0.42%</span>
 </div>
 </div>
+<div class="my-space-xs flex items-baseline justify-between">
+<span class="font-data-mono-xl text-data-mono-xl text-primary font-bold tracking-tight drop-shadow-[0_0_10px_rgba(255,193,116,0.3)]" id="spotPriceDisplay">
+          4630.58
+        </span>
 <div class="flex flex-col items-end">
-<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase">TARGET ZONE</span>
-<span class="font-data-mono-md text-data-mono-md text-primary font-bold">2396.40 H1</span>
+<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase">SPREAD</span>
+<span class="font-label-mono-sm text-label-mono-sm text-tertiary font-bold">0.08c • STABLE</span>
 </div>
 </div>
-<!-- Directive Banner -->
-<div class="bg-surface-container-lowest/90 p-space-sm rounded-lg flex items-start gap-space-sm">
-<span class="material-symbols-outlined text-tertiary text-[18px] shrink-0 mt-[1px]">flag</span>
-<div class="flex flex-col min-w-0">
-<span class="font-badge-mono-xs text-badge-mono-xs uppercase text-tertiary-fixed font-bold tracking-wider">OBJECTIVE FORMULA</span>
-<span class="font-body-md text-body-md text-on-surface font-medium truncate">Reprice from discount to premium → Form London H1</span>
+<div class="flex items-center justify-between pt-space-xs bg-surface-container-low px-space-sm py-[3px] rounded">
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">BID: <span class="text-on-surface font-semibold font-data-mono-md">4630.50</span></span>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">ASK: <span class="text-on-surface font-semibold font-data-mono-md">4630.58</span></span>
+<span class="font-badge-mono-xs text-badge-mono-xs text-secondary-fixed bg-surface-container-high px-space-xs rounded">DMA FIX</span>
 </div>
 </div>
-</div>
-<!-- Execution Specification Grid -->
-<div class="grid grid-cols-1 gap-space-sm">
-<!-- Buy Program Card -->
-<div class="bg-surface-container-high rounded-xl p-space-md shadow-md flex flex-col gap-space-sm">
+<!-- Volume Velocity Rev-Meter (F1 Tacho Gauge) -->
+<div class="flex flex-col justify-between bg-surface-container-lowest p-space-md rounded-xl shadow-md">
 <div class="flex items-center justify-between">
-<div class="flex items-center gap-space-xs">
-<span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
-<span class="font-headline-lg text-title-md text-on-surface uppercase tracking-wide">LONDON BUY PROGRAM</span>
+<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase tracking-wider font-semibold">VOLUME VELOCITY (REV METER)</span>
+<span class="font-badge-mono-xs text-badge-mono-xs text-primary bg-primary/10 px-space-xs py-[1px] rounded font-bold">84% EXT</span>
 </div>
-<span class="font-label-mono-sm text-label-mono-sm px-space-sm py-space-xs bg-tertiary-container/30 text-tertiary font-bold rounded">
-            LONG ONLY PROTOCOL
-          </span>
-</div>
-<div class="grid grid-cols-2 gap-space-xs pt-space-xs">
-<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-space-xs">
-<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase">PRIMARY ENTRY DOCK</span>
+<div class="my-space-xs flex items-center justify-between">
 <div class="flex items-baseline gap-space-xs">
-<span class="font-data-mono-lg text-data-mono-lg text-tertiary font-bold">ASIAN L1</span>
+<span class="font-data-mono-lg text-data-mono-lg text-secondary font-bold">539</span>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">t/60s</span>
 </div>
-<span class="font-body-sm text-body-sm text-on-surface-variant">Optimal Discount Liquidity Pool</span>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant font-mono">REDLINE PEAK</span>
 </div>
-<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-space-xs">
-<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase">DELIVERY CEILING</span>
-<div class="flex items-baseline gap-space-xs">
-<span class="font-data-mono-lg text-data-mono-lg text-primary font-bold">LONDON H1</span>
+<!-- F1 Tachometer Segmented Rev Bar -->
+<div class="space-y-[3px]">
+<div class="grid grid-cols-12 gap-[2px] h-3 bg-surface-container-high p-[1px] rounded">
+<div class="bg-secondary rounded-xs h-full"></div>
+<div class="bg-secondary rounded-xs h-full"></div>
+<div class="bg-secondary rounded-xs h-full"></div>
+<div class="bg-secondary rounded-xs h-full"></div>
+<div class="bg-tertiary rounded-xs h-full"></div>
+<div class="bg-tertiary rounded-xs h-full"></div>
+<div class="bg-tertiary rounded-xs h-full"></div>
+<div class="bg-primary rounded-xs h-full shadow-[0_0_4px_rgba(255,193,116,0.6)]"></div>
+<div class="bg-primary rounded-xs h-full shadow-[0_0_4px_rgba(255,193,116,0.6)]"></div>
+<div class="bg-error rounded-xs h-full animate-pulse shadow-[0_0_6px_rgba(255,180,171,0.8)]"></div>
+<div class="bg-surface-variant rounded-xs h-full opacity-40"></div>
+<div class="bg-surface-variant rounded-xs h-full opacity-40"></div>
 </div>
-<span class="font-body-sm text-body-sm text-on-surface-variant">Target Window: 12:00–14:00 EAT</span>
+<div class="flex justify-between text-badge-mono-xs font-label-mono-sm text-on-surface-variant px-[2px]">
+<span>IDLE (100)</span>
+<span>CRUISE (350)</span>
+<span class="text-error font-bold">REDLINE (600+)</span>
 </div>
 </div>
-<!-- Strict Directive Rules -->
-<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-space-xs">
-<div class="flex items-center gap-space-xs text-error">
-<span class="material-symbols-outlined text-[16px]">block</span>
-<span class="font-badge-mono-xs text-badge-mono-xs uppercase tracking-wider font-bold">EXECUTION MANDATE</span>
 </div>
-<ul class="flex flex-col gap-space-xs pl-space-sm">
-<li class="font-body-sm text-body-sm text-on-surface flex items-center gap-space-xs">
-<span class="w-1 h-1 rounded-full bg-tertiary shrink-0"></span>
-              Strictly NO SELLS allowed during London Buy Reprice phase.
-            </li>
-<li class="font-body-sm text-body-sm text-on-surface flex items-center gap-space-xs">
-<span class="w-1 h-1 rounded-full bg-tertiary shrink-0"></span>
-              Clean technical execution only upon displacement confirmation.
-            </li>
-<li class="font-body-sm text-body-sm text-on-surface flex items-center gap-space-xs">
-<span class="w-1 h-1 rounded-full bg-tertiary shrink-0"></span>
-              Hold disciplined patience for Asian L1 discount reclaim.
-            </li>
-</ul>
+<!-- Orderflow & Session Energy Card -->
+<div class="flex flex-col justify-between bg-surface-container-lowest p-space-md rounded-xl shadow-md">
+<div class="flex items-center justify-between">
+<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase tracking-wider font-semibold">ORDERFLOW MOMENTUM</span>
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs py-[1px] rounded bg-error-container text-on-error-container font-bold">W-EXP</span>
 </div>
-<!-- Expectation Pill Banner -->
-<div class="bg-primary-container/20 p-space-sm rounded-lg flex items-center justify-between">
+<div class="flex items-center justify-between my-space-xs">
 <div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
-<span class="font-title-md text-title-md text-primary uppercase">RR EXPECTATION</span>
+<span class="material-symbols-outlined text-error text-[20px]">trending_down</span>
+<span class="font-title-md text-title-md text-error font-bold tracking-tight">BEARISH DOWN</span>
 </div>
-<span class="font-data-mono-xl text-data-mono-xl text-primary font-bold">1:2</span>
-</div>
-</div>
-</div>
-</section>
-<!-- ENGINE 1: ASIA SELL PROGRAM CARD -->
-<section class="engine-card flex flex-col gap-space-md" id="engine-asia">
-<div class="bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col gap-space-sm">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-space-sm">
-<div class="w-7 h-7 rounded bg-error-container/40 flex items-center justify-center text-error">
-<span class="material-symbols-outlined text-[18px]">trending_down</span>
-</div>
-<div>
 <div class="flex items-center gap-space-xs">
-<span class="font-headline-lg text-title-md text-error uppercase">ENGINE 1: ASIA</span>
-<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs py-[1px] bg-surface-container-highest text-on-surface-variant font-bold rounded">STAND DOWN</span>
-</div>
-<p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">03:00 – 08:00 EAT (UTC+3)</p>
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs py-[2px] bg-error-container/40 text-error rounded font-bold">H4 SHORT</span>
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs py-[2px] bg-error-container/40 text-error rounded font-bold">M30 SHORT</span>
 </div>
 </div>
-<div class="bg-primary-container/20 px-space-sm py-space-xs rounded text-right">
-<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant block uppercase">RR TARGET</span>
-<span class="font-data-mono-md text-data-mono-md text-primary font-bold">1:3</span>
+<div class="flex items-center justify-between bg-surface-container-low px-space-sm py-[4px] rounded">
+<div class="flex items-center gap-space-xs truncate">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface truncate">SESSION ENERGY: ACTIVE PEAK</span>
 </div>
-</div>
-<!-- Objective formula -->
-<div class="bg-surface-container-lowest/90 p-space-sm rounded-lg flex items-start gap-space-sm">
-<span class="material-symbols-outlined text-error text-[18px] shrink-0 mt-[1px]">ads_click</span>
-<div class="flex flex-col min-w-0">
-<span class="font-badge-mono-xs text-badge-mono-xs uppercase text-error tracking-wider font-bold">OBJECTIVE</span>
-<span class="font-body-md text-body-md text-on-surface font-medium truncate">Build premium → Harvest stops → Complete Asian L1</span>
-</div>
-</div>
-<!-- Asia Phases Progression -->
-<div class="flex flex-col gap-space-xs pt-space-xs">
-<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase tracking-wider">CHRONOLOGICAL ENGINE PHASES</span>
-<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-[2px]">
-<div class="flex items-center justify-between">
-<span class="font-label-mono-sm text-label-mono-sm text-primary font-bold">PHASE A • SYDNEY RANGE BUILD</span>
-<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant">23:00 – 03:00 EAT</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface">Initial baseline range built → Sydney High/Low set • No aggressive execution.</p>
-</div>
-<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-[2px]">
-<div class="flex items-center justify-between">
-<span class="font-label-mono-sm text-label-mono-sm text-error font-bold">PHASE B • TOKYO MANIPULATION</span>
-<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant">03:00 – 03:30 EAT</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface">Fake high attempted → Stops above Sydney High targeted → Asian High formed.</p>
-</div>
-<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-[2px]">
-<div class="flex items-center justify-between">
-<span class="font-label-mono-sm text-label-mono-sm text-secondary font-bold">PHASE C • ASIA BLEEDING</span>
-<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant">03:30 – 08:00 EAT</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface">Sell-side delivery active → Price bleeds downward → Asian L1 formed.</p>
-</div>
-</div>
-<!-- Docks & Rules Grid -->
-<div class="grid grid-cols-2 gap-space-xs pt-space-xs">
-<div class="bg-surface-container p-space-sm rounded-lg flex flex-col gap-space-xs">
-<span class="font-badge-mono-xs text-badge-mono-xs text-error font-bold uppercase tracking-wider">SELL DOCKS</span>
-<div class="flex flex-col gap-space-xs text-on-surface font-label-mono-sm text-label-mono-sm">
-<div class="bg-surface-container-lowest px-space-xs py-[2px] rounded text-on-surface">1. Sydney High</div>
-<div class="bg-surface-container-lowest px-space-xs py-[2px] rounded text-on-surface">2. Tokyo High</div>
-<div class="bg-surface-container-lowest px-space-xs py-[2px] rounded text-error font-semibold">3. Asian High (Extreme)</div>
-</div>
-</div>
-<div class="bg-surface-container p-space-sm rounded-lg flex flex-col gap-space-xs">
-<span class="font-badge-mono-xs text-badge-mono-xs text-primary font-bold uppercase tracking-wider">RULES & EXIT</span>
-<ul class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
-<li>• Sell <span class="text-on-surface font-semibold">only</span> from extremes.</li>
-<li>• Never sell mid-range.</li>
-<li>• <span class="text-tertiary font-bold">CLOSE ALL</span> at Asian L1 (~07:50–08:00 EAT).</li>
-</ul>
+<span class="font-label-mono-sm text-label-mono-sm text-secondary-fixed font-bold shrink-0">11:00-14:30 EAT</span>
 </div>
 </div>
 </div>
-</section>
-<!-- ENGINE 3: NEW YORK ENGINE & DECISION GATE -->
-<section class="engine-card flex flex-col gap-space-md" id="engine-ny">
-<div class="bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col gap-space-sm">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-space-sm">
-<div class="w-7 h-7 rounded bg-secondary-container/30 flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-[18px]">alt_route</span>
-</div>
-<div>
-<span class="font-headline-lg text-title-md text-secondary uppercase">ENGINE 3: NEW YORK</span>
-<p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">16:00 – 01:00 EAT (UTC+3)</p>
-</div>
-</div>
-<span class="font-badge-mono-xs text-badge-mono-xs bg-surface-container-highest px-space-sm py-[2px] rounded text-on-surface-variant font-bold uppercase">NEXT UP</span>
-</div>
-<!-- Objective Formula -->
-<div class="bg-surface-container-lowest/90 p-space-sm rounded-lg flex items-start gap-space-sm">
-<span class="material-symbols-outlined text-secondary text-[18px] shrink-0 mt-[1px]">military_tech</span>
-<div class="flex flex-col min-w-0">
-<span class="font-badge-mono-xs text-badge-mono-xs uppercase text-secondary font-bold tracking-wider">PRIMARY DIRECTIVE</span>
-<span class="font-body-md text-body-md text-on-surface font-medium truncate">Raid London liquidity → Decide final direction → Form NY L1</span>
-</div>
-</div>
-<!-- Pre-Phase: London H1 Raid -->
-<div class="bg-surface-container-high p-space-sm rounded-lg flex items-center justify-between">
-<div class="flex flex-col">
-<span class="font-label-mono-sm text-label-mono-sm text-error font-bold uppercase">PRE-PHASE: LONDON H1 RAID (SELL)</span>
-<span class="font-body-sm text-body-sm text-on-surface">Sell from London H1 → Hold until NY L1</span>
-</div>
-<span class="font-data-mono-md text-data-mono-md text-primary font-bold">RR 1:2–1:3</span>
-</div>
-<!-- Critical Decision Gate -->
-<div class="bg-primary-container p-space-md rounded-xl text-on-primary-container shadow-md flex flex-col gap-space-xs">
-<div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-[20px] text-on-primary-container">crisis_alert</span>
-<span class="font-headline-lg text-title-md uppercase font-bold tracking-tight">NY L1 — DECISION GATE (CRITICAL)</span>
-</div>
-<p class="font-body-md text-body-md font-medium italic opacity-95">
-          “New York L1 is NOT a direction. It is a decision point.”
-        </p>
-</div>
-<!-- Scenario Dual Split -->
-<div class="grid grid-cols-2 gap-space-xs pt-space-xs">
-<!-- Scenario A: Bullish Expansion -->
-<div class="bg-surface-container-high p-space-sm rounded-xl flex flex-col gap-space-xs justify-between">
-<div class="flex flex-col gap-space-xs">
-<div class="flex items-center gap-space-xs text-tertiary">
-<span class="material-symbols-outlined text-[16px]">north</span>
-<span class="font-headline-lg text-body-md uppercase font-bold">SCENARIO A: EXPANSION</span>
-</div>
-<div class="bg-surface-container-lowest p-space-xs rounded text-on-surface-variant font-body-sm text-body-sm flex flex-col gap-[2px]">
-<span>• NY L1 holds</span>
-<span>• No displacement below</span>
-<span>• Buyers show intent</span>
-</div>
-<div class="bg-tertiary/10 p-space-xs rounded text-tertiary font-label-mono-sm text-label-mono-sm font-bold">
-              ACTION: BUY from NY L1
-            </div>
-</div>
-<div class="bg-surface-container-lowest p-space-xs rounded flex flex-col">
-<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase">RR LADDER</span>
-<span class="font-label-mono-sm text-label-mono-sm text-primary font-bold">1:1 → 1:2 → 1:3 → 1:4 → 1:7</span>
-</div>
-</div>
-<!-- Scenario B: Bearish Continuation -->
-<div class="bg-surface-container-high p-space-sm rounded-xl flex flex-col gap-space-xs justify-between">
-<div class="flex flex-col gap-space-xs">
-<div class="flex items-center gap-space-xs text-error">
-<span class="material-symbols-outlined text-[16px]">south</span>
-<span class="font-headline-lg text-body-md uppercase font-bold">SCENARIO B: CONTINUATION</span>
-</div>
-<div class="bg-surface-container-lowest p-space-xs rounded text-on-surface-variant font-body-sm text-body-sm flex flex-col gap-[2px]">
-<span>• NY L1 fails</span>
-<span>• Reclaims below level</span>
-<span>• Strong down velocity</span>
-</div>
-<div class="bg-error/10 p-space-xs rounded text-error font-label-mono-sm text-label-mono-sm font-bold">
-              ACTION: SELL continuation
-            </div>
-</div>
-<div class="bg-surface-container-lowest p-space-xs rounded flex flex-col">
-<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase">EXPECTATION</span>
-<span class="font-label-mono-sm text-label-mono-sm text-error font-bold">RR 1:2 – 1:3 (Redistribution)</span>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- DAILY RR SUMMARY ACCORDION TABLE -->
-<div class="bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col gap-space-sm">
+<!-- ========================================== -->
+<!-- 3. V8 SESSION ENGINES (F1 TELEMETRY STRIP) -->
+<!-- ========================================== -->
+<div class="flex flex-col bg-surface-container-lowest p-space-md rounded-xl shadow-md space-y-space-sm">
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-primary text-[18px]">table_rows</span>
-<span class="font-headline-lg text-title-md text-on-surface uppercase">DAILY RR PLAYBOOK SUMMARY</span>
+<span class="material-symbols-outlined text-secondary text-[16px]">tune</span>
+<span class="font-headline-lg text-title-md text-on-surface font-bold uppercase tracking-wider">V8 Session Engines // Firing Order</span>
 </div>
-<span class="font-badge-mono-xs text-badge-mono-xs bg-surface-container-highest px-space-xs py-[2px] rounded text-on-surface-variant font-bold uppercase">M5 / H1 MATRIX</span>
+<span class="font-badge-mono-xs text-badge-mono-xs text-secondary-fixed bg-surface-container-high px-space-xs py-[2px] rounded font-mono">FIRING: 1-5-4-8-6-3-7-2</span>
 </div>
-<!-- Terminal Micro-Table -->
-<div class="bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col">
-<div class="grid grid-cols-3 bg-surface-container-high px-space-sm py-space-xs text-on-surface-variant font-badge-mono-xs text-badge-mono-xs uppercase tracking-wider">
-<span>SESSION PHASE</span>
-<span class="text-center">PROGRAM BIAS</span>
-<span class="text-right">EXPECTED RR</span>
+<!-- 3 Session Columns -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-sm">
+<!-- Session 01: ASIA -->
+<div class="flex flex-col p-space-sm rounded bg-surface-container-low relative">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant font-bold">CYL 1-2</span>
+<span class="font-title-md text-body-md text-on-surface font-bold">01. ASIA RANGE</span>
 </div>
-<div class="grid grid-cols-3 px-space-sm py-space-xs font-data-mono-md text-data-mono-md items-center bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
-<span class="font-label-mono-sm text-label-mono-sm text-on-surface">Asia High → Asia L1</span>
-<span class="text-center font-bold text-error">SELL</span>
-<span class="text-right text-primary font-bold">1:3</span>
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs bg-tertiary-container/30 text-tertiary-fixed rounded font-bold">SWEPT</span>
 </div>
-<div class="grid grid-cols-3 px-space-sm py-space-xs font-data-mono-md text-data-mono-md items-center bg-surface-container-low/40 hover:bg-surface-container-low transition-colors">
-<span class="font-label-mono-sm text-label-mono-sm text-tertiary font-bold">Asia L1 → London H1</span>
-<span class="text-center font-bold text-tertiary">BUY (ACTIVE)</span>
-<span class="text-right text-primary font-bold">1:2</span>
+<div class="space-y-[3px] font-label-mono-sm text-label-mono-sm">
+<div class="flex justify-between text-on-surface-variant">
+<span>CAPACITY LOAD:</span>
+<span class="text-on-surface font-semibold font-data-mono-md">38%</span>
 </div>
-<div class="grid grid-cols-3 px-space-sm py-space-xs font-data-mono-md text-data-mono-md items-center bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
-<span class="font-label-mono-sm text-label-mono-sm text-on-surface">London H1 → NY L1</span>
-<span class="text-center font-bold text-error">SELL</span>
-<span class="text-right text-primary font-bold">1:2 – 1:3</span>
+<div class="flex justify-between text-on-surface-variant">
+<span>HIGH / LOW:</span>
+<span class="text-on-surface font-semibold font-data-mono-md">4643.1 / 4583.9</span>
 </div>
-<div class="grid grid-cols-3 px-space-sm py-space-xs font-data-mono-md text-data-mono-md items-center bg-surface-container-low/40 hover:bg-surface-container-low transition-colors">
-<span class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold">NY L1 Decision</span>
-<span class="text-center font-bold text-secondary">EVAL GATE</span>
-<span class="text-right text-primary font-bold">1:1 → 1:7</span>
+<div class="flex justify-between text-on-surface-variant">
+<span>TARGET LIQ:</span>
+<span class="text-primary font-bold font-data-mono-md">4600.23</span>
 </div>
 </div>
-</div>
-<!-- Master Execution Rules Badge Card -->
-<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-lg flex flex-col gap-space-sm">
-<div class="flex items-center gap-space-xs text-primary">
-<span class="material-symbols-outlined text-[18px]">gavel</span>
-<span class="font-headline-lg text-title-md uppercase tracking-wider">NON-NEGOTIABLE MASTER RULES</span>
-</div>
-<div class="grid grid-cols-2 gap-space-xs">
-<div class="bg-surface-container p-space-sm rounded-lg flex items-start gap-space-xs">
-<span class="material-symbols-outlined text-primary text-[15px] shrink-0 mt-[1px]">check_circle</span>
-<span class="font-body-sm text-body-sm text-on-surface font-medium">Trade only at recognized session extremes.</span>
-</div>
-<div class="bg-surface-container p-space-sm rounded-lg flex items-start gap-space-xs">
-<span class="material-symbols-outlined text-error text-[15px] shrink-0 mt-[1px]">do_not_disturb_on</span>
-<span class="font-body-sm text-body-sm text-on-surface font-medium">Never force RR or chase midpoint momentum.</span>
-</div>
-<div class="bg-surface-container p-space-sm rounded-lg flex items-start gap-space-xs">
-<span class="material-symbols-outlined text-primary-container text-[15px] shrink-0 mt-[1px]">hourglass_empty</span>
-<span class="font-body-sm text-body-sm text-on-surface font-medium">Session fails to deliver → stand down immediately.</span>
-</div>
-<div class="bg-surface-container p-space-sm rounded-lg flex items-start gap-space-xs">
-<span class="material-symbols-outlined text-secondary text-[15px] shrink-0 mt-[1px]">lock</span>
-<span class="font-body-sm text-body-sm text-on-surface font-medium">NY L1 requires structure displacement confirmation.</span>
+<!-- Segmented load bar -->
+<div class="w-full bg-surface-container-highest h-1.5 rounded mt-space-sm overflow-hidden">
+<div class="bg-surface-tint h-full w-[38%]"></div>
 </div>
 </div>
-<!-- Final Prescriptive Rule -->
-<div class="bg-surface-container-high px-space-sm py-space-xs rounded-lg flex items-center justify-between">
-<div class="flex items-center gap-space-xs text-on-surface-variant">
-<span class="material-symbols-outlined text-[16px] text-tertiary">shield</span>
-<span class="font-label-mono-sm text-label-mono-sm font-semibold text-on-surface uppercase">No bias, only state machines</span>
+<!-- Session 02: LONDON (IN PLAY / EXECUTING) -->
+<div class="flex flex-col p-space-sm rounded bg-surface-container-high relative shadow-[0_0_12px_rgba(76,215,246,0.15)]">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-badge-mono-xs text-badge-mono-xs text-secondary-fixed font-bold">CYL 3-6</span>
+<span class="font-title-md text-body-md text-secondary font-bold">02. LONDON EXPANSION</span>
 </div>
-<span class="font-badge-mono-xs text-badge-mono-xs text-primary font-bold uppercase tracking-wider">CAPITAL PRESERVATION > OPPORTUNITY</span>
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs bg-secondary-container/40 text-secondary-fixed rounded font-bold animate-pulse">IN PLAY</span>
+</div>
+<div class="space-y-[3px] font-label-mono-sm text-label-mono-sm">
+<div class="flex justify-between text-on-surface-variant">
+<span>CAPACITY LOAD:</span>
+<span class="text-secondary font-bold font-data-mono-md">90% EXECUTING</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>LONDON H / L:</span>
+<span class="text-on-surface font-semibold font-data-mono-md">4621.6 / 4576.1</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>H1 REPRICE:</span>
+<span class="text-tertiary font-bold font-data-mono-md">65% COMPLETED</span>
 </div>
 </div>
+<!-- Glowing Neon Segmented London Progress Bar -->
+<div class="w-full bg-surface-container-highest h-1.5 rounded mt-space-sm overflow-hidden">
+<div class="bg-secondary h-full w-[90%] shadow-[0_0_8px_rgba(76,215,246,0.8)]"></div>
+</div>
+</div>
+<!-- Session 03: NEW YORK (STANDBY) -->
+<div class="flex flex-col p-space-sm rounded bg-surface-container-low relative">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant font-bold">CYL 7-8</span>
+<span class="font-title-md text-body-md text-on-surface font-bold">03. NEW YORK FLOW</span>
+</div>
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs bg-surface-container-highest text-on-surface-variant rounded font-bold">GATE STANDBY</span>
+</div>
+<div class="space-y-[3px] font-label-mono-sm text-label-mono-sm">
+<div class="flex justify-between text-on-surface-variant">
+<span>CAPACITY POOL:</span>
+<span class="text-on-surface font-semibold font-data-mono-md">85% POOLED</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>EST NY H1/L1:</span>
+<span class="text-on-surface font-semibold font-data-mono-md">4633.9 / 4576.1</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>NY T-MINUS:</span>
+<span class="text-primary-fixed font-bold font-data-mono-md">T-14:00 EAT (15:30)</span>
+</div>
+</div>
+<!-- NY Standby Load Bar -->
+<div class="w-full bg-surface-container-highest h-1.5 rounded mt-space-sm overflow-hidden">
+<div class="bg-outline-variant h-full w-[85%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- 4. DOM // DEPTH (L2 ORDER BOOK TERMINAL)   -->
+<!-- ========================================== -->
+<div class="flex flex-col bg-surface-container-lowest p-space-md rounded-xl shadow-md space-y-space-sm">
+<div class="flex items-center justify-between flex-wrap gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[17px]">reorder</span>
+<span class="font-headline-lg text-title-md text-on-surface font-bold tracking-wide">DOM // L2 DEPTH LADDER</span>
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs py-[1px] rounded bg-error-container/30 text-error font-mono font-bold">-240 LOTS DELTA BIAS</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">SPREAD:</span>
+<span class="font-data-mono-md text-data-mono-md text-primary font-bold">0.11 / 11c</span>
+</div>
+</div>
+<!-- Absorption Alert Banner -->
+<div class="flex items-center justify-between bg-error-container/20 px-space-sm py-[4px] rounded">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-[15px] animate-pulse">crisis_alert</span>
+<span class="font-label-mono-sm text-label-mono-sm text-error font-bold tracking-tight">LIQUIDITY WALL TESTED // INSTITUTIONAL ABSORPTION DETECTED</span>
+</div>
+<span class="font-badge-mono-xs text-badge-mono-xs text-on-error-container uppercase font-bold bg-error-container px-space-xs rounded">ICEBERG ACTIVE</span>
+</div>
+<!-- DOM Table -->
+<div class="flex flex-col space-y-[2px] font-data-mono-md text-data-mono-md">
+<!-- Asks (Top / Red Wall) -->
+<div class="relative flex items-center justify-between px-space-sm py-[3px] rounded bg-surface-container-low overflow-hidden">
+<div class="absolute inset-y-0 right-0 bg-error/15 w-[85%] pointer-events-none"></div>
+<div class="flex items-center gap-space-xs z-10">
+<span class="font-label-mono-sm text-label-mono-sm text-error font-bold">ASK</span>
+<span class="text-error font-bold">4630.90</span>
+</div>
+<div class="flex items-center gap-space-sm z-10">
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs bg-error text-surface font-bold rounded">1,000 WALL</span>
+<span class="text-on-surface font-bold">1,024.5 lots</span>
+</div>
+</div>
+<div class="relative flex items-center justify-between px-space-sm py-[3px] rounded bg-surface-container-low overflow-hidden">
+<div class="absolute inset-y-0 right-0 bg-error/10 w-[45%] pointer-events-none"></div>
+<span class="text-error/90 z-10">4630.80</span>
+<span class="text-on-surface-variant z-10">450.2 lots</span>
+</div>
+<div class="relative flex items-center justify-between px-space-sm py-[3px] rounded bg-surface-container-low overflow-hidden">
+<div class="absolute inset-y-0 right-0 bg-error/5 w-[20%] pointer-events-none"></div>
+<span class="text-error/80 z-10">4630.70</span>
+<span class="text-on-surface-variant z-10">182.1 lots</span>
+</div>
+<!-- Spread Pivot Midpoint -->
+<div class="flex items-center justify-between px-space-sm py-[2px] bg-surface-container-high rounded text-badge-mono-xs font-label-mono-sm">
+<span class="text-secondary font-bold">MIDPOINT: 4630.54</span>
+<span class="text-on-surface-variant font-mono">MATCH ENGINE: LMAX LONDON POOL</span>
+<span class="text-tertiary font-bold">TICK: ▼ DOWNTICK</span>
+</div>
+<!-- Bids (Bottom / Green Wall) -->
+<div class="relative flex items-center justify-between px-space-sm py-[3px] rounded bg-surface-container-low overflow-hidden">
+<div class="absolute inset-y-0 right-0 bg-tertiary/10 w-[30%] pointer-events-none"></div>
+<span class="text-tertiary/80 z-10">4630.40</span>
+<span class="text-on-surface-variant z-10">210.0 lots</span>
+</div>
+<div class="relative flex items-center justify-between px-space-sm py-[3px] rounded bg-surface-container-low overflow-hidden">
+<div class="absolute inset-y-0 right-0 bg-tertiary/15 w-[50%] pointer-events-none"></div>
+<span class="text-tertiary/90 z-10">4630.30</span>
+<span class="text-on-surface-variant z-10">540.8 lots</span>
+</div>
+<div class="relative flex items-center justify-between px-space-sm py-[3px] rounded bg-surface-container-low overflow-hidden">
+<div class="absolute inset-y-0 right-0 bg-tertiary/20 w-[95%] pointer-events-none"></div>
+<div class="flex items-center gap-space-xs z-10">
+<span class="font-label-mono-sm text-label-mono-sm text-tertiary font-bold">BID</span>
+<span class="text-tertiary font-bold">4630.15</span>
+</div>
+<div class="flex items-center gap-space-sm z-10">
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs bg-tertiary text-on-tertiary-container font-bold rounded">1,000 WALL</span>
+<span class="text-on-surface font-bold">1,118.0 lots</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- 5. SNIPER PROTOCOL M1 GATE & COCKPIT       -->
+<!-- ========================================== -->
+<div class="flex flex-col bg-surface-container-lowest p-space-md rounded-xl shadow-md space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[17px]">gps_fixed</span>
+<span class="font-headline-lg text-title-md text-on-surface font-bold">SNIPER PROTOCOL M1 GATE</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">PHASE:</span>
+<span class="font-badge-mono-xs text-badge-mono-xs px-space-xs py-[1px] bg-primary-container/20 text-primary-fixed rounded font-bold">AMDE DISTRIBUTION</span>
+</div>
+</div>
+<!-- Gate Status High Visibility Banner -->
+<div class="flex items-center justify-between bg-error-container/30 px-space-md py-space-sm rounded">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="w-2.5 h-2.5 rounded-full bg-error animate-ping shrink-0"></span>
+<span class="font-label-mono-sm text-title-md text-error font-bold tracking-tight truncate">GATE: WAIT // ACCUMULATION ONLY - NO CHASE</span>
+</div>
+<span class="font-badge-mono-xs text-badge-mono-xs bg-primary text-on-primary font-bold px-space-xs py-[2px] rounded shrink-0">LOCKED</span>
+</div>
+<!-- 3 Micro LED Status Indicator Pills -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-xs">
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-[4px] rounded">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_6px_rgba(86,229,169,0.9)]"></span>
+<span class="font-label-mono-sm text-label-mono-sm text-tertiary-fixed font-bold truncate">Liq Sweep: CONFIRMED</span>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-[4px] rounded">
+<span class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_6px_rgba(245,158,11,0.9)] animate-pulse"></span>
+<span class="font-label-mono-sm text-label-mono-sm text-primary font-bold truncate">M1 MSS / FVG: FORMING</span>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-[4px] rounded">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_6px_rgba(86,229,169,0.9)]"></span>
+<span class="font-label-mono-sm text-label-mono-sm text-tertiary-fixed font-bold truncate">Spread Guard: 0.08c OK</span>
+</div>
+</div>
+<!-- Execution Mode + Armed F1 Launch Trigger -->
+<div class="flex items-center justify-between gap-space-sm flex-wrap pt-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">MODE:</span>
+<span class="font-data-mono-md text-data-mono-md text-secondary-fixed bg-surface-container-high px-space-sm py-[2px] rounded font-semibold">PULLBACK_MGMT</span>
+</div>
+<!-- F1 Launch Control Tactile Action Button -->
+<button class="flex-1 min-w-[200px] flex items-center justify-center gap-space-sm bg-primary hover:bg-primary-container text-on-primary py-space-sm px-space-md rounded font-headline-lg text-title-md font-bold tracking-wide uppercase transition-all shadow-[0_0_18px_rgba(245,158,11,0.4)] active:scale-[0.98] cursor-pointer" id="armSniperBtn">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+<span>ARM V8 SNIPER TRIGGER</span>
+</button>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- 6. RISK & POSITION MANAGEMENT DOCK         -->
+<!-- ========================================== -->
+<div class="flex flex-col bg-surface-container-lowest p-space-md rounded-xl shadow-lg space-y-space-sm mb-space-md">
+<!-- Header with Risk Selector & Floating P&L -->
+<div class="flex items-center justify-between flex-wrap gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant uppercase font-bold">RISK SELECTOR:</span>
+<button class="risk-pill font-badge-mono-xs text-badge-mono-xs px-space-sm py-[2px] rounded bg-surface-container-high text-on-surface-variant hover:text-on-surface">0.5%</button>
+<button class="risk-pill font-badge-mono-xs text-badge-mono-xs px-space-sm py-[2px] rounded bg-primary text-on-primary font-bold shadow-[0_0_8px_rgba(245,158,11,0.5)]">1.0% ACTIVE</button>
+<button class="risk-pill font-badge-mono-xs text-badge-mono-xs px-space-sm py-[2px] rounded bg-surface-container-high text-on-surface-variant hover:text-on-surface">2.0%</button>
+</div>
+<!-- Live Floating P&L Badge -->
+<div class="flex items-center gap-space-xs bg-tertiary-container/20 px-space-sm py-[3px] rounded">
+<span class="material-symbols-outlined text-tertiary text-[15px]">account_balance_wallet</span>
+<span class="font-data-mono-md text-data-mono-md text-tertiary-fixed font-bold">+$288.74 (+13.6 PIPS)</span>
+</div>
+</div>
+<!-- Calculated Lot Readout -->
+<div class="flex items-center justify-between bg-surface-container-low px-space-sm py-[4px] rounded text-label-mono-sm font-label-mono-sm">
+<span class="text-on-surface-variant">AUTO LOT SIZING:</span>
+<span class="text-primary font-bold font-data-mono-md">0.10 LOTS // $12.50 RISK EQUIVALENT</span>
+</div>
+<!-- 3 Instant Action Tactical Buttons -->
+<div class="grid grid-cols-3 gap-space-sm pt-space-xs">
+<!-- SL to BE -->
+<button class="flex flex-col items-center justify-center p-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-on-surface transition-all active:scale-[0.98] cursor-pointer">
+<span class="material-symbols-outlined text-secondary text-[20px] mb-[2px]">security</span>
+<span class="font-title-md text-body-md font-bold">SL TO BE</span>
+<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant">+FEES</span>
+</button>
+<!-- Partial 50% -->
+<button class="flex flex-col items-center justify-center p-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-on-surface transition-all active:scale-[0.98] cursor-pointer">
+<span class="material-symbols-outlined text-tertiary text-[20px] mb-[2px]">pie_chart</span>
+<span class="font-title-md text-body-md font-bold">PARTIAL 50%</span>
+<span class="font-badge-mono-xs text-badge-mono-xs text-on-surface-variant">BANK HALF</span>
+</button>
+<!-- Emergency FLATTEN ALL -->
+<button class="flex flex-col items-center justify-center p-space-sm rounded bg-error-container hover:bg-error text-on-error-container hover:text-on-error transition-all active:scale-[0.98] cursor-pointer shadow-[0_0_12px_rgba(147,0,10,0.5)]">
+<span class="material-symbols-outlined text-[20px] mb-[2px]">power_settings_new</span>
+<span class="font-title-md text-body-md font-bold uppercase tracking-wider">FLATTEN ALL</span>
+<span class="font-badge-mono-xs text-badge-mono-xs text-on-error-container/80">KILL SWITCH</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Client-side Interactive Pit-Wall Micro-Actions -->
 <script>
-    function selectEngine(engineId) {
-      // Toggle engine tabs
-      const tabs = {
-        'engine-asia': 'tab-asia',
-        'engine-london': 'tab-london',
-        'engine-ny': 'tab-ny'
-      };
-
-      // Smooth scroll target card into focus
-      const el = document.getElementById(engineId);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-
-      // Highlight active tab visually
-      Object.keys(tabs).forEach(id => {
-        const btn = document.getElementById(tabs[id]);
-        if (id === engineId) {
-          btn.classList.add('bg-surface-container-high', 'text-primary');
-          btn.classList.remove('bg-transparent', 'text-on-surface-variant');
+  (function initPitWall() {
+    // 1. Arm Sniper Trigger Toggle Interaction
+    const armBtn = document.getElementById('armSniperBtn');
+    if (armBtn) {
+      let isArmed = false;
+      armBtn.addEventListener('click', () => {
+        isArmed = !isArmed;
+        if (isArmed) {
+          armBtn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">cyclone</span><span>READY // ARMED FOR SNIPE</span>';
+          armBtn.classList.remove('bg-primary', 'text-on-primary');
+          armBtn.classList.add('bg-tertiary', 'text-on-tertiary-container', 'shadow-[0_0_24px_rgba(86,229,169,0.7)]');
         } else {
-          btn.classList.remove('bg-surface-container-high', 'text-primary');
-          btn.classList.add('bg-transparent', 'text-on-surface-variant');
+          armBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">lock</span><span>ARM V8 SNIPER TRIGGER</span>';
+          armBtn.classList.remove('bg-tertiary', 'text-on-tertiary-container', 'shadow-[0_0_24px_rgba(86,229,169,0.7)]');
+          armBtn.classList.add('bg-primary', 'text-on-primary');
         }
       });
     }
 
-    // Keep live UTC+3 clock running for precision
-    setInterval(() => {
-      const now = new Date();
-      // Force EAT offset UTC+3
-      const eatTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (3 * 3600000));
-      const hours = String(eatTime.getHours()).padStart(2, '0');
-      const mins = String(eatTime.getMinutes()).padStart(2, '0');
-      const secs = String(eatTime.getSeconds()).padStart(2, '0');
-      const el = document.getElementById('eat-live-clock');
-      if (el) {
-        el.textContent = `${hours}:${mins}:${secs} EAT`;
-      }
-    }, 1000);
-  // Live Price Fetcher for Engines Screen
-const spotPriceElem = document.getElementById('live-spot-price');
-if (spotPriceElem) {
-    setInterval(async () => {
-        try {
-            const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
-            const response = await fetch(renderUrl);
-            const data = await response.json();
-            
-            const liveBid = parseFloat(data.current_price || "4586.11");
-            
-            spotPriceElem.textContent = liveBid.toFixed(2);
-            spotPriceElem.style.color = "#4cd7f6"; 
-        } catch (error) {
-            console.error("Error fetching live data:", error);
-            if (spotPriceElem) spotPriceElem.style.color = "#ffb4ab";
-        }
-    }, 5000);
-}
-  </script>
-              <nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container border-t border-outline-variant flex justify-around items-center px-space-xs pt-space-xs">
+    // 2. Nitrous / Turbo Boost Interaction
+    const nitroBtn = document.getElementById('nitrousBtn');
+    if (nitroBtn) {
+      nitroBtn.addEventListener('click', () => {
+        nitroBtn.classList.toggle('bg-secondary');
+        nitroBtn.classList.toggle('text-on-secondary');
+      });
+    }
+
+    // 3. Risk Preset Active Selector
+    const riskPills = document.querySelectorAll('.risk-pill');
+    riskPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        riskPills.forEach(p => {
+          p.className = 'risk-pill font-badge-mono-xs text-badge-mono-xs px-space-sm py-[2px] rounded bg-surface-container-high text-on-surface-variant hover:text-on-surface';
+        });
+        pill.className = 'risk-pill font-badge-mono-xs text-badge-mono-xs px-space-sm py-[2px] rounded bg-primary text-on-primary font-bold shadow-[0_0_8px_rgba(245,158,11,0.5)]';
+      });
+    });
+
+    // 4. Subtle Micro Price Fluctuation (Live Market feel)
+    const priceDisplay = document.getElementById('spotPriceDisplay');
+    if (priceDisplay) {
+      setInterval(() => {
+        const delta = (Math.random() * 0.12 - 0.06).toFixed(2);
+        const current = 4630.58;
+        const newPrice = (current + parseFloat(delta)).toFixed(2);
+        priceDisplay.textContent = newPrice;
+      }, 3000);
+    }
+  })();
+</script>
+ <nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container border-t border-outline-variant flex justify-around items-center px-space-xs pt-space-xs">
     <a href="index.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
         <span class="material-symbols-outlined mb-[2px] text-[20px]">radar</span>
         <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">HUD</span>
