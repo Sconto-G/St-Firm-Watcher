@@ -411,6 +411,8 @@
         sellStage = 1;
         sellTitle.innerHTML = '⚡ FIRED SHORT!';
         sellSub.textContent = 'TRANSMITTING MT5 FIX PACKET...';
+          fireMissile("SELL");
+          
         setTimeout(() => {
           sellBtn.classList.remove('bg-primary-container/40', 'border-primary', 'animate-pulse');
           sellBtn.classList.add('bg-error-container/40', 'border-error/50');
@@ -452,6 +454,8 @@
         buyStage = 1;
         buyTitle.innerHTML = '⚡ FIRED LONG!';
         buySub.textContent = 'TRANSMITTING MT5 FIX PACKET...';
+          fireMissile("BUY");
+          
         setTimeout(() => {
           buyBtn.classList.remove('bg-primary-container/40', 'border-primary', 'animate-pulse');
           buyBtn.classList.add('bg-tertiary-container/30', 'border-tertiary/50');
