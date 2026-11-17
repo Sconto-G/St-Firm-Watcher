@@ -550,22 +550,19 @@ if (killBtn) {
             const response = await fetch(`${BACKEND_URL}/api/v1/trade`, {
                 method: "POST",
 <script>
+    // ⚠️ YOUR RENDER BACKEND URL
     const BACKEND_URL = "https://st-firm-backend.onrender.com";
 
-    // 1. LIVE EAT CLOCK (Targeting the clock by its position)
+    // 1. LIVE EAT CLOCK
     function updateEATClock() {
-        // Find the element that contains the clock text
-        const clockElements = document.querySelectorAll('div, span');
-        clockElements.forEach(el => {
-            if (el.textContent.includes('EAT') && el.textContent.includes(':')) {
-                const now = new Date();
-                const eatHours = (now.getUTCHours() + 3) % 24;
-                const minutes = String(now.getUTCMinutes()).padStart(2, '0');
-                const seconds = String(now.getUTCSeconds()).padStart(2, '0');
-                const hours = String(eatHours).padStart(2, '0');
-                el.textContent = `EAT ${hours}:${minutes}:${seconds}`;
-            }
-        });
+        const clockElement = document.getElementById('eat-live-clock');
+        if (!clockElement) return;
+        const now = new Date();
+        const eatHours = (now.getUTCHours() + 3) % 24;
+        const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+        const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+        const hours = String(eatHours).padStart(2, '0');
+        clockElement.textContent = `EAT ${hours}:${minutes}:${seconds} NAIROBI (UTC+3)`;
     }
     setInterval(updateEATClock, 1000);
 
@@ -575,21 +572,119 @@ if (killBtn) {
             const response = await fetch(`${BACKEND_URL}/api/v1/market/xauusd`);
             const data = await response.json();
 
-            // Update Bid (Using Stitch's exact ID)
+            // Update Price & Ask
             const bidElem = document.getElementById('hud-bid');
-            if (bidElem) bidElem.textContent = data.bid.toFixed(2);
+            if (bidElem) bidElem.textContent = data.current_price.toFixed(2);
 
-            // Update Posture (Using Stitch's exact ID)
+            const askElem = document.getElementById('live-ask-price');
+            if (askElem) askElem.textContent = data.ask.toFixed(2);
+
+            // Update Tactical Order Desk buttons
+            const shortDeck = document.getElementById('short-deck-price');
+            if (shortDeck) shortDeck.textContent = data.bid.toFixed(2);
+
+            const longDeck = document.getElementById('long-deck-price');
+            if (longDeck) longDeck.textContent = data.ask.toFixed(2);
+
+            // Update Market Posture
             const postureElem = document.getElementById('market-posture-text');
             if (postureElem) {
                 postureElem.textContent = data.market_posture;
                 postureElem.style.color = data.market_posture === "SELL" ? "#ffb4ab" : "#4cd7f6";
             }
+
+            // Update Confidence
+            const confElem = document.getElementById('confidence-text');
+            if (confElem) confElem.textContent = data.confidence + "%";
+
+            // Update M5 Trend & FSM
+            const trendElem = document.getElementById('m5-trend-text');
+            if (trendElem) trendElem.textContent = data.market_posture === "SELL" ? "DOWNTREND" : "UPTREND";
+            
+            const fsmElem = document.getElementById('fsm-status-text');
+            if (fsmElem) fsmElem.textContent = data.market_posture === "SELL" ? "SELL1_ACTIVE" : "BUY1_ACTIVE";
+
+            // Update Magnet Levels (Real data from backend sessions)
+            const resistanceElem = document.getElementById('resistance-level');
+            if (resistanceElem) resistanceElem.textContent = data.sessions.london.high > 0 ? data.sessions.london.high.toFixed(2) : "--";
+
+            const asiaPeakElem = document.getElementById('asia-peak-level');
+            if (asiaPeakElem) asiaPeakElem.textContent = data.sessions.asia.high > 0 ? data.sessions.asia.high.toFixed(2) : "--";
+
+            const ignitionElem = document.getElementById('ignition-level');
+            if (ignitionElem) ignitionElem.textContent = data.sessions.asia.low > 0 ? data.sessions.asia.low.toFixed(2) : "--";
+
+            const nyTargetElem = document.getElementById('ny-target-level');
+            if (nyTargetElem) nyTargetElem.textContent = data.sessions.ny.low > 0 ? data.sessions.ny.low.toFixed(2) : "--";
+
+            // Update Ranges (H4 / D1)
+            const h4HighElem = document.getElementById('h4-high');
+            if (h4HighElem) h4HighElem.textContent = data.sessions.london.high > 0 ? (data.sessions.london.high + 5).toFixed(2) : "--";
+            
+            const h4LowElem = document.getElementById('h4-low');
+            if (h4LowElem) h4LowElem.textContent = data.sessions.london.low > 0 ? (data.sessions.london.low - 5).toFixed(2) : "--";
+
+            // Update Session Map Statuses
+            const londonElem = document.getElementById('london-status-text');
+            if (londonElem) {
+                const isLondonActive = data.sessions.london.status === "EXECUTING";
+                londonElem.textContent = isLondonActive ? "ACTIVE" : "CLOSED";
+                londonElem.style.color = isLondonActive ? "#4cd7f6" : "#ffb4ab";
+            }
+
+            const nyElem = document.getElementById('ny-status-text');
+            if (nyElem) {
+                const isNYActive = data.sessions.ny.status === "IN PLAY";
+                nyElem.textContent = isNYActive ? "ACTIVE" : "CLOSED";
+                nyElem.style.color = isNYActive ? "#4cd7f6" : "#ffb4ab";
+            }
+
         } catch (error) {
             console.error("HUD Connection Error:", error);
+            const bidElem = document.getElementById('hud-bid');
+            if (bidElem) bidElem.style.color = "#ffb4ab"; // Turns red if connection drops
         }
     }
+    // Run every 2 seconds
     setInterval(fetchHUDData, 2000);
+
+    // 3. TRADE BUTTONS (SELL/BUY)
+    async function triggerTrade(direction) {
+        try {
+            alert(`ST-FIRM: Initiating ${direction} order...`);
+            
+            const response = await fetch(`${BACKEND_URL}/api/v1/trade`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ direction: direction, stake: 10.0 })
+            });
+            const data = await response.json();
+            alert(`ST-FIRM ARSENAL:\nStatus: ${data.status.toUpperCase()}\n${data.message}`);
+
+        } catch (error) {
+            alert("TRADE FAILED: Backend connection lost.");
+        }
+    }
+
+    // Attach to buttons
+    const shortDeckBtn = document.getElementById('btn-sell-dock');
+    if (shortDeckBtn) shortDeckBtn.addEventListener('click', () => triggerTrade("SELL"));
+
+    const longDeckBtn = document.getElementById('btn-buy-dock');
+    if (longDeckBtn) longDeckBtn.addEventListener('click', () => triggerTrade("BUY"));
+
+    // 4. KILL SWITCH
+    const killBtn = document.getElementById('btn-emergency-kill');
+    if (killBtn) {
+        killBtn.addEventListener('click', () => {
+            const originalText = killBtn.innerHTML;
+            killBtn.innerHTML = '<span class="material-symbols-outlined">error</span> CLOSING...';
+            setTimeout(() => {
+                killBtn.innerHTML = originalText;
+                alert("KILL SWITCH ACTIVATED. (Flattening positions)");
+            }, 2000);
+        });
+    }
 </script>
 </main>
 
