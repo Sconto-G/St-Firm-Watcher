@@ -514,6 +514,21 @@
             alert("SYSTEM ERROR: Backend connection lost. Wake Render.");
         }
     }
+    // --- OVERLORD TRADE EXECUTION ---
+async function fireMissile(direction) {
+    try {
+        alert(`OVERLORD: Transmitting ${direction} order...`);
+        const response = await fetch("https://st-firm-backend.onrender.com/api/v1/trade", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ direction: direction, lots: 2.12 }) 
+        });
+        const data = await response.json();
+        alert(`OVERLORD ARSENAL:\nStatus: ${data.status.toUpperCase()}\nMessage: ${data.message}`);
+    } catch (error) {
+        alert("SYSTEM ERROR: Backend connection lost. Wake Render.");
+    }
+}
 </script>
 <nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container border-t border-outline-variant flex justify-around items-center px-space-xs pt-space-xs">
     <a href="index.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
