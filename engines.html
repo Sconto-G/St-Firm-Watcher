@@ -433,57 +433,85 @@
 </div>
 </div>
 <!-- Client-side Interactive Pit-Wall Micro-Actions -->
+<!-- Client-side Interactive Pit-Wall Micro-Actions -->
 <script>
-  (function initPitWall() {
-    // 1. Arm Sniper Trigger Toggle Interaction
-    const armBtn = document.getElementById('armSniperBtn');
-    if (armBtn) {
-      let isArmed = false;
-      armBtn.addEventListener('click', () => {
-        isArmed = !isArmed;
-        if (isArmed) {
-          armBtn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">cyclone</span><span>READY // ARMED FOR SNIPE</span>';
-          armBtn.classList.remove('bg-primary', 'text-on-primary');
-          armBtn.classList.add('bg-tertiary', 'text-on-tertiary-container', 'shadow-[0_0_24px_rgba(86,229,169,0.7)]');
-        } else {
-          armBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">lock</span><span>ARM V8 SNIPER TRIGGER</span>';
-          armBtn.classList.remove('bg-tertiary', 'text-on-tertiary-container', 'shadow-[0_0_24px_rgba(86,229,169,0.7)]');
-          armBtn.classList.add('bg-primary', 'text-on-primary');
+    // ⚠️ REPLACE THIS WITH YOUR EXACT RENDER URL
+    const BACKEND_URL = "https://st-firm-backend.onrender.com"; 
+
+    (function initPitWall() {
+        // 1. Arm Sniper Trigger Toggle Interaction
+        const armBtn = document.getElementById('armSniperBtn');
+        if (armBtn) {
+            let isArmed = false;
+            armBtn.addEventListener('click', async () => {
+                isArmed = !isArmed;
+                
+                // Send signal to Python backend
+                try {
+                    const response = await fetch(`${BACKEND_URL}/api/v1/arm-sniper`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    const result = await response.json();
+                    
+                    if (result.armed) {
+                        armBtn.innerHTML = '<span class="material-symbols-outlined">lock_open</span> SNIPER ARMED';
+                        armBtn.classList.remove('bg-primary', 'text-on-primary');
+                        armBtn.classList.add('bg-error', 'text-on-error'); // Turn Red
+                    } else {
+                        armBtn.innerHTML = '<span class="material-symbols-outlined">lock</span> ARM V8 SNIPER TRIGGER';
+                        armBtn.classList.remove('bg-error', 'text-on-error');
+                        armBtn.classList.add('bg-primary', 'text-on-primary'); // Turn Gold
+                    }
+                } catch (error) {
+                    console.error("Arm Error:", error);
+                }
+            });
         }
-      });
-    }
 
-    // 2. Nitrous / Turbo Boost Interaction
-    const nitroBtn = document.getElementById('nitrousBtn');
-    if (nitroBtn) {
-      nitroBtn.addEventListener('click', () => {
-        nitroBtn.classList.toggle('bg-secondary');
-        nitroBtn.classList.toggle('text-on-secondary');
-      });
-    }
+        // 2. Nitrous / Turbo Boost Interaction
+        const nitroBtn = document.getElementById('nitroBtn');
+        if (nitroBtn) {
+            nitroBtn.addEventListener('click', () => {
+                nitroBtn.classList.toggle('bg-secondary');
+                nitroBtn.classList.toggle('text-on-secondary');
+            });
+        }
 
-    // 3. Risk Preset Active Selector
-    const riskPills = document.querySelectorAll('.risk-pill');
-    riskPills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        riskPills.forEach(p => {
-          p.className = 'risk-pill font-badge-mono-xs text-badge-mono-xs px-space-sm py-[2px] rounded bg-surface-container-high text-on-surface-variant hover:text-on-surface';
+        // 3. Risk Preset Active Selector
+        const riskPills = document.querySelectorAll('.risk-pill');
+        riskPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                riskPills.forEach(p => {
+                    p.className = 'risk-pill font-badge-mono-xs text-badge-mono-xs border border-outline-variant/30 text-on-surface-variant px-3 py-1 rounded-full';
+                });
+                pill.className = 'risk-pill font-badge-mono-xs text-badge-mono-xs bg-primary text-on-primary px-3 py-1 rounded-full';
+            });
         });
-        pill.className = 'risk-pill font-badge-mono-xs text-badge-mono-xs px-space-sm py-[2px] rounded bg-primary text-on-primary font-bold shadow-[0_0_8px_rgba(245,158,11,0.5)]';
-      });
-    });
+    })();
 
-    // 4. Subtle Micro Price Fluctuation (Live Market feel)
-    const priceDisplay = document.getElementById('spotPriceDisplay');
-    if (priceDisplay) {
-      setInterval(() => {
-        const delta = (Math.random() * 0.12 - 0.06).toFixed(2);
-        const current = 4630.58;
-        const newPrice = (current + parseFloat(delta)).toFixed(2);
-        priceDisplay.textContent = newPrice;
-      }, 3000);
+    // 🚨 4. THE REAL V8 TELEMETRY FETCHER (Replaces the fake Math.random)
+    async function fetchV8Telemetry() {
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/v1/market/xauusd`);
+            const data = await response.json();
+
+            // Live Price (ID from your line 477)
+            const priceDisplay = document.getElementById('spotPrice');
+            if (priceDisplay) {
+                priceDisplay.textContent = data.current_price.toFixed(2);
+            }
+
+            // (We will add the other IDs for sessions and LEDs in the next step once you confirm this is live!)
+
+        } catch (error) {
+            console.error("Telemetry Error:", error);
+        }
     }
-  })();
+
+    // Run the fetch every 1 second
+    setInterval(fetchV8Telemetry, 1000);
+
 </script>
  <nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container border-t border-outline-variant flex justify-around items-center px-space-xs pt-space-xs">
     <a href="index.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
