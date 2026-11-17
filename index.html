@@ -508,6 +508,36 @@ if (syncBtn) {
         }, 750);
     });
 }
+    // 4. THE NUCLEAR TRIGGER (TACTICAL ORDER DESK)
+const shortDeckBtn = document.getElementById('btn-sell-dock');
+const longDeckBtn = document.getElementById('btn-buy-dock');
+
+async function triggerTrade(direction) {
+    try {
+        // Change button text to show it's loading
+        alert(`ST-FIRM: Initiating ${direction} order... Please wait.`);
+        
+        const response = await fetch("https://st-firm-backend.onrender.com/api/v1/trade", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ direction: direction, lots: 0.10 })
+        });
+        const data = await response.json();
+        
+        // Pop up the result from Deriv
+        alert(`ST-FIRM ARSENAL:\n\nStatus: ${data.status.toUpperCase()}\nMessage: ${data.message}`);
+        
+    } catch (error) {
+        alert("TRADE FAILED: Backend connection lost. Make sure Render is awake.");
+    }
+}
+
+if (shortDeckBtn) {
+    shortDeckBtn.addEventListener('click', () => triggerTrade("SELL"));
+}
+if (longDeckBtn) {
+    longDeckBtn.addEventListener('click', () => triggerTrade("BUY"));
+    }
     
 </script>
 </main>
