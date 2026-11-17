@@ -550,19 +550,22 @@ if (killBtn) {
             const response = await fetch(`${BACKEND_URL}/api/v1/trade`, {
                 method: "POST",
 <script>
-    // ⚠️ YOUR RENDER BACKEND URL
     const BACKEND_URL = "https://st-firm-backend.onrender.com";
 
-    // 1. LIVE EAT CLOCK
+    // 1. LIVE EAT CLOCK (Targeting the clock by its position)
     function updateEATClock() {
-        const clockElement = document.getElementById('eat-live-clock');
-        if (!clockElement) return;
-        const now = new Date();
-        const eatHours = (now.getUTCHours() + 3) % 24;
-        const minutes = String(now.getUTCMinutes()).padStart(2, '0');
-        const seconds = String(now.getUTCSeconds()).padStart(2, '0');
-        const hours = String(eatHours).padStart(2, '0');
-        clockElement.textContent = `EAT ${hours}:${minutes}:${seconds}`;
+        // Find the element that contains the clock text
+        const clockElements = document.querySelectorAll('div, span');
+        clockElements.forEach(el => {
+            if (el.textContent.includes('EAT') && el.textContent.includes(':')) {
+                const now = new Date();
+                const eatHours = (now.getUTCHours() + 3) % 24;
+                const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+                const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+                const hours = String(eatHours).padStart(2, '0');
+                el.textContent = `EAT ${hours}:${minutes}:${seconds}`;
+            }
+        });
     }
     setInterval(updateEATClock, 1000);
 
@@ -572,52 +575,21 @@ if (killBtn) {
             const response = await fetch(`${BACKEND_URL}/api/v1/market/xauusd`);
             const data = await response.json();
 
-            // Stitch used 'hud-bid' for the big price
+            // Update Bid (Using Stitch's exact ID)
             const bidElem = document.getElementById('hud-bid');
             if (bidElem) bidElem.textContent = data.bid.toFixed(2);
 
-            // Stitch used 'market-posture-text' for WAITING/SELL
+            // Update Posture (Using Stitch's exact ID)
             const postureElem = document.getElementById('market-posture-text');
             if (postureElem) {
                 postureElem.textContent = data.market_posture;
                 postureElem.style.color = data.market_posture === "SELL" ? "#ffb4ab" : "#4cd7f6";
             }
-
-            // Tactical Order Desk Prices (Sell/Buy buttons)
-            const shortDeck = document.getElementById('short-deck-price');
-            if (shortDeck) shortDeck.textContent = data.bid.toFixed(2);
-
-            const longDeck = document.getElementById('long-deck-price');
-            if (longDeck) longDeck.textContent = data.ask.toFixed(2);
-
         } catch (error) {
             console.error("HUD Connection Error:", error);
         }
     }
     setInterval(fetchHUDData, 2000);
-
-    // 3. TRADE BUTTONS
-    async function triggerTrade(direction) {
-        try {
-            alert(`ST-FIRM: Initiating ${direction} order...`);
-            const response = await fetch(`${BACKEND_URL}/api/v1/trade`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ direction: direction, stake: 10.0 })
-            });
-            const data = await response.json();
-            alert(`ST-FIRM ARSENAL:\nStatus: ${data.status.toUpperCase()}\n${data.message}`);
-        } catch (error) {
-            alert("TRADE FAILED: Backend connection lost.");
-        }
-    }
-
-    // Attach to buttons (Now using the IDs we just added)
-    const shortDeckBtn = document.getElementById('btn-sell-dock');
-    if (shortDeckBtn) shortDeckBtn.addEventListener('click', () => triggerTrade("SELL"));
-
-    const longDeckBtn = document.getElementById('btn-buy-dock');
-    if (longDeckBtn) longDeckBtn.addEventListener('click', () => triggerTrade("BUY"));
 </script>
 </main>
 
