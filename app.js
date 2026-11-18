@@ -2,6 +2,7 @@
 
 // 1. Live EAT Clock
 function updateEATClock() {
+    // This looks for any element with the class "eat-live-clock"
     const clockElements = document.querySelectorAll('.eat-live-clock');
     if (clockElements.length === 0) return;
     
@@ -13,6 +14,7 @@ function updateEATClock() {
     
     const timeString = `EAT ${hours}:${minutes}:${seconds} NAIROBI (UTC+3)`;
     
+    // Updates every element on the page that has this class
     clockElements.forEach(el => {
         el.textContent = timeString;
     });
@@ -35,14 +37,14 @@ async function fetchMarketData() {
             spotPriceElem.style.color = "#4cd7f6"; 
         }
 
-        // Update Posture (HUD Page)
+        // Update Posture (Specifically for the HUD Page)
         const postureElem = document.getElementById('market-posture-text');
         if (postureElem && data.market_posture) {
             postureElem.textContent = data.market_posture;
             postureElem.style.color = data.market_posture === "BUY" ? "#4cd7f6" : "#ffb4ab";
         }
 
-        // Update Confidence (HUD Page)
+        // Update Confidence (Specifically for the HUD Page)
         const confidenceElem = document.getElementById('confidence-text');
         if (confidenceElem && data.confidence !== undefined) {
             confidenceElem.textContent = data.confidence + "%";
