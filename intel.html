@@ -78,18 +78,18 @@
 
     <!-- Scripts -->
     <script>
-        // Live Clock
-        function updateEATClock() {
-            const clockElement = document.getElementById('eat-live-clock');
-            if (!clockElement) return;
-            const now = new Date();
-            const eatHours = (now.getUTCHours() + 3) % 24;
-            const minutes = String(now.getUTCMinutes()).padStart(2, '0');
-            const seconds = String(now.getUTCSeconds()).padStart(2, '0');
-            const hours = String(eatHours).padStart(2, '0');
-            clockElement.textContent = `EAT ${hours}:${minutes}:${seconds}`;
-        }
-        setInterval(updateEATClock, 1000);
+       // Live Clock
+function updateEATClock() {
+    const clockElement = document.getElementById('eat-live-clock');
+    if (!clockElement) return;
+    const now = new Date();
+    const eatHours = (now.getUTCHours() + 3) % 24;
+    const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+    const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+    const hours = String(eatHours).padStart(2, '0');
+    clockElement.textContent = `EAT ${hours}:${minutes}:${seconds}`;
+}
+setInterval(updateEATClock, 1000); 
 
         // AI Chat Logic
         async function sendMessage() {
