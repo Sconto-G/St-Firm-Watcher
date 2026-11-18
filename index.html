@@ -348,212 +348,155 @@
 </div>
 </section>
 </div>
-<script>
-  // Dynamic Live Clock for Nairobi EAT (UTC+3)
-  function updateEATClock() {
-    const now = new Date();
-    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-    const eatTime = new Date(utc + (3600000 * 3));
-    const h = String(eatTime.getHours()).padStart(2, '0');
-    const m = String(eatTime.getMinutes()).padStart(2, '0');
-    const s = String(eatTime.getSeconds()).padStart(2, '0');
-    const el = document.getElementById('eatClock');
-    if (el) el.textContent = `${h}:${m}:${s}`;
-  }
-  setInterval(updateEATClock, 1000);
-  updateEATClock();
+    <!-- CLEAN NAVIGATION BAR -->
+    <nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container border-t border-outline-variant flex justify-around items-center px-space-xs pt-space-xs">
+        <a href="index.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-primary">
+            <span class="material-symbols-outlined mb-[2px] text-[20px]">radar</span>
+            <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">HUD</span>
+        </a>
+        <a href="engines.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined mb-[2px] text-[20px]">memory</span>
+            <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Engines</span>
+        </a>
+        <a href="campaign.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined mb-[2px] text-[20px]">flag</span>
+            <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Campaign</span>
+        </a>
+        <a href="recovery.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined mb-[2px] text-[20px]">settings_backup_restore</span>
+            <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Recovery</span>
+        </a>
+        <a href="intel.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined mb-[2px] text-[20px]">psychology</span>
+            <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Intel</span>
+        </a>
+    </nav>
 
-  // Radar Rescan Feedback
-  const rescanBtn = document.getElementById('btnRescan');
-  const radarSpinner = document.getElementById('radarSpinner');
-  if (rescanBtn && radarSpinner) {
-    rescanBtn.addEventListener('click', () => {
-      radarSpinner.style.animationDuration = '0.35s';
-      rescanBtn.classList.add('bg-secondary-container/40', 'border-secondary');
-      setTimeout(() => {
-        radarSpinner.style.animationDuration = '3s';
-        rescanBtn.classList.remove('bg-secondary-container/40', 'border-secondary');
-      }, 1200);
-    });
-  }
-
-  // Interactive Two-Stage Safety Confirmation Cannon Handlers
-  let sellStage = 1;
-  let buyStage = 1;
-  let sellTimeout, buyTimeout;
-
-  const sellBtn = document.getElementById('btnSellCannon');
-  const sellTitle = document.getElementById('sellStateTitle');
-  const sellSub = document.getElementById('sellSubtext');
-
-  if (sellBtn && sellTitle && sellSub) {
-    sellBtn.addEventListener('click', () => {
-      if (sellStage === 1) {
-        sellStage = 2;
-        sellBtn.classList.remove('bg-error-container/40', 'border-error/50');
-        sellBtn.classList.add('bg-primary-container/40', 'border-primary', 'animate-pulse');
-        sellTitle.innerHTML = '⚠️ CONFIRM EXECUTION';
-        sellTitle.classList.remove('text-on-error-container');
-        sellTitle.classList.add('text-primary');
-        sellSub.textContent = 'STAGE 2: TAP AGAIN TO FIRE SHORT';
-
-        sellTimeout = setTimeout(() => {
-          sellStage = 1;
-          sellBtn.classList.remove('bg-primary-container/40', 'border-primary', 'animate-pulse');
-          sellBtn.classList.add('bg-error-container/40', 'border-error/50');
-          sellTitle.innerHTML = '💀 ARM SHORT';
-          sellTitle.classList.add('text-on-error-container');
-          sellTitle.classList.remove('text-primary');
-          sellSub.textContent = '2.12 LOTS @ BID • TAP TO PRIME';
-        }, 3500);
-      } else {
-        clearTimeout(sellTimeout);
-        sellStage = 1;
-        sellTitle.innerHTML = '⚡ FIRED SHORT!';
-        sellSub.textContent = 'TRANSMITTING MT5 FIX PACKET...';
-          fireMissile("SELL");
-          
-        setTimeout(() => {
-          sellBtn.classList.remove('bg-primary-container/40', 'border-primary', 'animate-pulse');
-          sellBtn.classList.add('bg-error-container/40', 'border-error/50');
-          sellTitle.innerHTML = '💀 ARM SHORT';
-          sellTitle.classList.add('text-on-error-container');
-          sellTitle.classList.remove('text-primary');
-          sellSub.textContent = '2.12 LOTS @ BID • TAP TO PRIME';
-        }, 1200);
-      }
-    });
-  }
-
-  const buyBtn = document.getElementById('btnBuyCannon');
-  const buyTitle = document.getElementById('buyStateTitle');
-  const buySub = document.getElementById('buySubtext');
-
-  if (buyBtn && buyTitle && buySub) {
-    buyBtn.addEventListener('click', () => {
-      if (buyStage === 1) {
-        buyStage = 2;
-        buyBtn.classList.remove('bg-tertiary-container/30', 'border-tertiary/50');
-        buyBtn.classList.add('bg-primary-container/40', 'border-primary', 'animate-pulse');
-        buyTitle.innerHTML = '⚠️ CONFIRM EXECUTION';
-        buyTitle.classList.remove('text-tertiary-fixed');
-        buyTitle.classList.add('text-primary');
-        buySub.textContent = 'STAGE 2: TAP AGAIN TO FIRE LONG';
-
-        buyTimeout = setTimeout(() => {
-          buyStage = 1;
-          buyBtn.classList.remove('bg-primary-container/40', 'border-primary', 'animate-pulse');
-          buyBtn.classList.add('bg-tertiary-container/30', 'border-tertiary/50');
-          buyTitle.innerHTML = '🎯 ARM LONG';
-          buyTitle.classList.add('text-tertiary-fixed');
-          buyTitle.classList.remove('text-primary');
-          buySub.textContent = '2.12 LOTS @ ASK • TAP TO PRIME';
-        }, 3500);
-      } else {
-        clearTimeout(buyTimeout);
-        buyStage = 1;
-        buyTitle.innerHTML = '⚡ FIRED LONG!';
-        buySub.textContent = 'TRANSMITTING MT5 FIX PACKET...';
-          fireMissile("BUY");
-          
-        setTimeout(() => {
-          buyBtn.classList.remove('bg-primary-container/40', 'border-primary', 'animate-pulse');
-          buyBtn.classList.add('bg-tertiary-container/30', 'border-tertiary/50');
-          buyTitle.innerHTML = '🎯 ARM LONG';
-          buyTitle.classList.add('text-tertiary-fixed');
-          buyTitle.classList.remove('text-primary');
-          buySub.textContent = '2.12 LOTS @ ASK • TAP TO PRIME';
-        }, 1200);
-      }
-    });
-  }
-
-  // Emergency Kill Switch
-  const killBtn = document.getElementById('btnKillSwitch');
-  if (killBtn) {
-    killBtn.addEventListener('click', () => {
-      if (confirm('🚨 EXECUTE EMERGENCY KILL SWITCH? ALL OPEN POSITIONS WILL BE IMMEDIATELY FLATTENED.')) {
-        killBtn.textContent = 'EXECUTING FLATTEN COMMAND...';
-        setTimeout(() => {
-          killBtn.innerHTML = '<span class="material-symbols-outlined text-[16px]">check_circle</span> ALL POSITIONS FLATTENED';
-          killBtn.classList.remove('bg-error');
-          killBtn.classList.add('bg-surface-container-high', 'text-on-surface-variant');
-        }, 700);
-      }
-    });
-  }
-        // --- OVERLORD LIVE PRICE FETCHER ---
-    // (Make sure your big price 4586.11 in the HTML has id="live-spot-price")
-    const spotPriceElem = document.getElementById('live-spot-price');
-    if (spotPriceElem) {
-        setInterval(async () => {
+    <!-- OVERLORD HUD SPECIFIC JAVASCRIPT -->
+    <script>
+        // 1. THE WEAPON LOADOUT (ARM SHORT / ARM LONG)
+        async function fireMissile(direction) {
             try {
-                const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
-                const response = await fetch(renderUrl);
+                alert(`OVERLORD: Transmitting ${direction} order...`);
+                const response = await fetch("https://st-firm-backend.onrender.com/api/v1/trade", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ direction: direction, lots: 2.12 }) 
+                });
                 const data = await response.json();
-                const liveBid = parseFloat(data.current_price || "4586.11");
-                spotPriceElem.textContent = liveBid.toFixed(2);
-                spotPriceElem.style.color = "#4cd7f6"; 
+                alert(`OVERLORD ARSENAL:\nStatus: ${data.status.toUpperCase()}\nMessage: ${data.message}`);
             } catch (error) {
-                console.error("Error fetching live data:", error);
+                alert("SYSTEM ERROR: Backend connection lost. Wake Render.");
             }
-        }, 5000); 
-    }
-
-    // --- OVERLORD TRADE EXECUTION ---
-    async function fireMissile(direction) {
-        try {
-            const response = await fetch("https://st-firm-backend.onrender.com/api/v1/trade", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ direction: direction, lots: 2.12 }) 
-            });
-            const data = await response.json();
-            alert(`OVERLORD ARSENAL:\nStatus: ${data.status.toUpperCase()}\nMessage: ${data.message}`);
-        } catch (error) {
-            alert("SYSTEM ERROR: Backend connection lost. Wake Render.");
         }
-    }
-    // --- OVERLORD TRADE EXECUTION ---
-async function fireMissile(direction) {
-    try {
-        alert(`OVERLORD: Transmitting ${direction} order...`);
-        const response = await fetch("https://st-firm-backend.onrender.com/api/v1/trade", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ direction: direction, lots: 2.12 }) 
-        });
-        const data = await response.json();
-        alert(`OVERLORD ARSENAL:\nStatus: ${data.status.toUpperCase()}\nMessage: ${data.message}`);
-    } catch (error) {
-        alert("SYSTEM ERROR: Backend connection lost. Wake Render.");
-    }
-}
-</script>
-<nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container border-t border-outline-variant flex justify-around items-center px-space-xs pt-space-xs">
-    <a href="index.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined mb-[2px] text-[20px]">radar</span>
-        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">HUD</span>
-    </a>
-    <a href="engines.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined mb-[2px] text-[20px]">memory</span>
-        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Engines</span>
-    </a>
-    <a href="campaign.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined mb-[2px] text-[20px]">flag</span>
-        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Campaign</span>
-    </a>
-    <a href="recovery.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined mb-[2px] text-[20px]">settings_backup_restore</span>
-        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Recovery</span>
-    </a>
-    <!-- OUR NEW 5TH TAB -->
-    <a href="intel.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined mb-[2px] text-[20px]">psychology</span>
-        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Intel</span>
-    </a>
-        </nav>
-    </main>
-    <script src="app.js"></script>  <!-- ADD THIS HERE -->
+
+        // --- SELL CANNON LOGIC ---
+        let sellStage = 1;
+        let sellTimeout;
+        const sellBtn = document.getElementById('btnSellCannon');
+        const sellTitle = document.getElementById('sellStateTitle');
+        const sellSub = document.getElementById('sellSubtext');
+
+        if (sellBtn && sellTitle && sellSub) {
+            sellBtn.addEventListener('click', () => {
+                if (sellStage === 1) {
+                    sellStage = 2;
+                    sellBtn.classList.remove('bg-error-container/40', 'border-error');
+                    sellBtn.classList.add('bg-primary-container/40', 'border-primary');
+                    sellTitle.innerHTML = '⚠️ CONFIRM EXECUTION';
+                    sellTitle.classList.remove('text-on-error-container');
+                    sellTitle.classList.add('text-primary');
+                    sellSub.textContent = 'STAGE 2: TAP AGAIN TO FIRE SHORT';
+                    
+                    sellTimeout = setTimeout(() => {
+                        sellStage = 1;
+                        sellBtn.classList.remove('bg-primary-container/40', 'border-primary');
+                        sellBtn.classList.add('bg-error-container/40', 'border-error');
+                        sellTitle.innerHTML = '💀 ARM SHORT';
+                        sellTitle.classList.add('text-on-error-container');
+                        sellTitle.classList.remove('text-primary');
+                        sellSub.textContent = '2.12 LOTS @ BID • TAP TO PRIME';
+                    }, 3500);
+                } else {
+                    clearTimeout(sellTimeout);
+                    sellStage = 1;
+                    sellTitle.innerHTML = '⚡ FIRED SHORT!';
+                    sellSub.textContent = 'TRANSMITTING MT5 FIX PACKET...';
+                    fireMissile("SELL");
+                    setTimeout(() => {
+                        sellBtn.classList.remove('bg-primary-container/40', 'border-primary');
+                        sellBtn.classList.add('bg-error-container/40', 'border-error');
+                        sellTitle.innerHTML = '💀 ARM SHORT';
+                        sellTitle.classList.add('text-on-error-container');
+                        sellTitle.classList.remove('text-primary');
+                        sellSub.textContent = '2.12 LOTS @ BID • TAP TO PRIME';
+                    }, 1200);
+                }
+            });
+        }
+
+        // --- BUY CANNON LOGIC ---
+        let buyStage = 1;
+        let buyTimeout;
+        const buyBtn = document.getElementById('btnBuyCannon');
+        const buyTitle = document.getElementById('buyStateTitle');
+        const buySub = document.getElementById('buySubtext');
+
+        if (buyBtn && buyTitle && buySub) {
+            buyBtn.addEventListener('click', () => {
+                if (buyStage === 1) {
+                    buyStage = 2;
+                    buyBtn.classList.remove('bg-tertiary-container/30', 'border-tertiary');
+                    buyBtn.classList.add('bg-primary-container/40', 'border-primary');
+                    buyTitle.innerHTML = '⚠️ CONFIRM EXECUTION';
+                    buyTitle.classList.remove('text-tertiary-fixed');
+                    buyTitle.classList.add('text-primary');
+                    buySub.textContent = 'STAGE 2: TAP AGAIN TO FIRE LONG';
+                    
+                    buyTimeout = setTimeout(() => {
+                        buyStage = 1;
+                        buyBtn.classList.remove('bg-primary-container/40', 'border-primary');
+                        buyBtn.classList.add('bg-tertiary-container/30', 'border-tertiary');
+                        buyTitle.innerHTML = '🎯 ARM LONG';
+                        buyTitle.classList.add('text-tertiary-fixed');
+                        buyTitle.classList.remove('text-primary');
+                        buySub.textContent = '2.12 LOTS @ ASK • TAP TO PRIME';
+                    }, 3500);
+                } else {
+                    clearTimeout(buyTimeout);
+                    buyStage = 1;
+                    buyTitle.innerHTML = '⚡ FIRED LONG!';
+                    buySub.textContent = 'TRANSMITTING MT5 FIX PACKET...';
+                    fireMissile("BUY");
+                    setTimeout(() => {
+                        buyBtn.classList.remove('bg-primary-container/40', 'border-primary');
+                        buyBtn.classList.add('bg-tertiary-container/30', 'border-tertiary');
+                        buyTitle.innerHTML = '🎯 ARM LONG';
+                        buyTitle.classList.add('text-tertiary-fixed');
+                        buyTitle.classList.remove('text-primary');
+                        buySub.textContent = '2.12 LOTS @ ASK • TAP TO PRIME';
+                    }, 1200);
+                }
+            });
+        }
+
+        // 3. EMERGENCY KILL SWITCH
+        const killBtn = document.getElementById('btnKillSwitch');
+        if (killBtn) {
+            killBtn.addEventListener('click', () => {
+                if (confirm('🚨 EXECUTE EMERGENCY KILL SWITCH? ALL OPEN POSITIONS WILL BE FLATTENED.')) {
+                    killBtn.textContent = 'EXECUTING FLATTEN COMMAND...';
+                    setTimeout(() => {
+                        killBtn.innerHTML = '<span class="material-symbols-outlined">power_settings_new</span> KILL SWITCH // CLOSE ALL EXPOSURE';
+                        killBtn.classList.remove('bg-error');
+                        killBtn.classList.add('bg-surface-container-high', 'text-on-surface');
+                    }, 700);
+                }
+            });
+        }
+    </script>
+
+    <!-- THE MASTER BRAIN -->
+    <script src="app.js"></script>
 </body>
 </html>
