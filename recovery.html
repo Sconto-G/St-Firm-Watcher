@@ -341,7 +341,7 @@
 </div>
 </section>
 </div>
-    <!-- CLEAN NAVIGATION BAR -->
+        <!-- CLEAN NAVIGATION BAR -->
     <nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container border-t border-outline-variant flex justify-around items-center px-space-xs pt-space-xs">
         <a href="index.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
             <span class="material-symbols-outlined mb-[2px] text-[20px]">radar</span>
@@ -364,6 +364,25 @@
             <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Intel</span>
         </a>
     </nav>
+
+    <!-- RECOVERY PAGE SPECIFIC JAVASCRIPT -->
+    <script>
+        // Emergency Flatten Kill-Switch Trigger
+        const flattenBtn = document.getElementById('flatten-btn');
+        if (flattenBtn) {
+            flattenBtn.addEventListener('click', () => {
+                const confirmed = confirm('EXECUTE RECOVERY EMERGENCY FLATTEN? All pending and active docks will be immediately closed.');
+                if (confirmed) {
+                    flattenBtn.classList.add('bg-error', 'text-on-error');
+                    flattenBtn.innerText = 'KILL ORDER SENT';
+                    setTimeout(() => {
+                        flattenBtn.classList.remove('bg-error', 'text-on-error');
+                        flattenBtn.innerHTML = '<span class="material-symbols-outlined text-[14px]">bolt</span> FORCE FLATTEN';
+                    }, 2400);
+                }
+            });
+        }
+    </script>
 
     <!-- THE MASTER BRAIN -->
     <script src="app.js"></script>
