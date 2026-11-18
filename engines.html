@@ -434,109 +434,50 @@
 </div>
 <!-- Client-side Interactive Pit-Wall Micro-Actions -->
 <!-- Client-side Interactive Pit-Wall Micro-Actions -->
-<script>
-    // ⚠️ REPLACE THIS WITH YOUR EXACT RENDER URL
-    const BACKEND_URL = "https://st-firm-backend.onrender.com"; 
+    <!-- CLEAN NAVIGATION BAR -->
+    <nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container border-t border-outline-variant flex justify-around items-center px-space-xs pt-space-xs">
+        <a href="index.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined mb-[2px] text-[20px]">radar</span>
+            <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">HUD</span>
+        </a>
+        <a href="engines.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-primary">
+            <span class="material-symbols-outlined mb-[2px] text-[20px]">memory</span>
+            <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Engines</span>
+        </a>
+        <a href="campaign.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined mb-[2px] text-[20px]">flag</span>
+            <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Campaign</span>
+        </a>
+        <a href="recovery.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined mb-[2px] text-[20px]">settings_backup_restore</span>
+            <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Recovery</span>
+        </a>
+        <a href="intel.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined mb-[2px] text-[20px]">psychology</span>
+            <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Intel</span>
+        </a>
+    </nav>
 
-    (function initPitWall() {
-        // 1. Arm Sniper Trigger Toggle Interaction
-        const armBtn = document.getElementById('armSniperBtn');
-        if (armBtn) {
-            let isArmed = false;
-            armBtn.addEventListener('click', async () => {
-                isArmed = !isArmed;
-                
-                // Send signal to Python backend
-                try {
-                    const response = await fetch(`${BACKEND_URL}/api/v1/arm-sniper`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                    const result = await response.json();
-                    
-                    if (result.armed) {
-                        armBtn.innerHTML = '<span class="material-symbols-outlined">lock_open</span> SNIPER ARMED';
-                        armBtn.classList.remove('bg-primary', 'text-on-primary');
-                        armBtn.classList.add('bg-error', 'text-on-error'); // Turn Red
-                    } else {
-                        armBtn.innerHTML = '<span class="material-symbols-outlined">lock</span> ARM V8 SNIPER TRIGGER';
-                        armBtn.classList.remove('bg-error', 'text-on-error');
-                        armBtn.classList.add('bg-primary', 'text-on-primary'); // Turn Gold
-                    }
-                } catch (error) {
-                    console.error("Arm Error:", error);
-                }
+    <!-- PAGE-SPECIFIC BUTTON LOGIC (Keeps your buttons functioning) -->
+    <script>
+        // Force Rescan Button
+        const rescanBtn = document.getElementById('btnRescan');
+        const radarSpinner = document.getElementById('radarSpinner');
+        if (rescanBtn && radarSpinner) {
+            rescanBtn.addEventListener('click', () => {
+                radarSpinner.style.animationDuration = '0.35s';
+                rescanBtn.classList.add('bg-secondary-container/40', 'border-secondary');
+                setTimeout(() => {
+                    radarSpinner.style.animationDuration = '3s';
+                    rescanBtn.classList.remove('bg-secondary-container/40', 'border-secondary');
+                }, 1200);
             });
         }
+        
+        // Add other button listeners here if the Engines page has them
+    </script>
 
-        // 2. Nitrous / Turbo Boost Interaction
-        const nitroBtn = document.getElementById('nitroBtn');
-        if (nitroBtn) {
-            nitroBtn.addEventListener('click', () => {
-                nitroBtn.classList.toggle('bg-secondary');
-                nitroBtn.classList.toggle('text-on-secondary');
-            });
-        }
-
-        // 3. Risk Preset Active Selector
-        const riskPills = document.querySelectorAll('.risk-pill');
-        riskPills.forEach(pill => {
-            pill.addEventListener('click', () => {
-                riskPills.forEach(p => {
-                    p.className = 'risk-pill font-badge-mono-xs text-badge-mono-xs border border-outline-variant/30 text-on-surface-variant px-3 py-1 rounded-full';
-                });
-                pill.className = 'risk-pill font-badge-mono-xs text-badge-mono-xs bg-primary text-on-primary px-3 py-1 rounded-full';
-            });
-        });
-    })();
-
-    // 🚨 4. THE REAL V8 TELEMETRY FETCHER (Replaces the fake Math.random)
-    async function fetchV8Telemetry() {
-        try {
-            const response = await fetch(`${BACKEND_URL}/api/v1/market/xauusd`);
-            const data = await response.json();
-
-            // Live Price (ID from your line 477)
-            const priceDisplay = document.getElementById('spotPrice');
-            if (priceDisplay) {
-                priceDisplay.textContent = data.current_price.toFixed(2);
-            }
-
-            // (We will add the other IDs for sessions and LEDs in the next step once you confirm this is live!)
-
-        } catch (error) {
-            console.error("Telemetry Error:", error);
-        }
-    }
-
-    // Run the fetch every 1 second
-    setInterval(fetchV8Telemetry, 1000);
-
-</script>
- <nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container border-t border-outline-variant flex justify-around items-center px-space-xs pt-space-xs">
-    <a href="index.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined mb-[2px] text-[20px]">radar</span>
-        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">HUD</span>
-    </a>
-    <a href="engines.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined mb-[2px] text-[20px]">memory</span>
-        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Engines</span>
-    </a>
-    <a href="campaign.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined mb-[2px] text-[20px]">flag</span>
-        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Campaign</span>
-    </a>
-    <a href="recovery.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined mb-[2px] text-[20px]">settings_backup_restore</span>
-        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Recovery</span>
-    </a>
-    <!-- OUR NEW 5TH TAB -->
-    <a href="intel.html" class="flex-1 flex flex-col items-center justify-center py-space-sm text-on-surface-variant hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined mb-[2px] text-[20px]">psychology</span>
-        <span class="font-label-mono-sm text-label-mono-sm text-[10px] uppercase">Intel</span>
-    </a>
-                  </nav>
-    </main>
-    <script src="app.js"></script>  <!-- ADD THIS HERE -->
+    <!-- THE MASTER BRAIN -->
+    <script src="app.js"></script>
 </body>
 </html>
