@@ -1,0 +1,15 @@
+{
+  "name": "ST-FIRM Watcher",
+  "short_name": "ST-FIRM",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0f141c",
+  "theme_color": "#0f141c",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2933/2933925.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
