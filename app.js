@@ -56,6 +56,27 @@ if (compassPriceElem) {
             confidenceElem.textContent = data.confidence + "%";
         }
         
+        // Update Bloodlust Gauge
+const bloodlustBar = document.getElementById('bloodlust-bar');
+const bloodlustText = document.getElementById('bloodlust-text');
+
+if (bloodlustBar && data.bloodlust !== undefined) {
+    bloodlustBar.style.width = data.bloodlust + '%';
+    if (bloodlustText) bloodlustText.innerText = data.bloodlust + '%';
+    
+    // Change color based on intensity
+    if (data.bloodlust > 75) {
+        bloodlustBar.className = "h-full bg-red-500 transition-all duration-500"; // Extreme
+        if (bloodlustText) bloodlustText.className = "text-red-500 font-bold";
+    } else if (data.bloodlust > 40) {
+        bloodlustBar.className = "h-full bg-orange-400 transition-all duration-500"; // Volatile
+        if (bloodlustText) bloodlustText.className = "text-orange-400 font-bold";
+    } else {
+        bloodlustBar.className = "h-full bg-cyan-400 transition-all duration-500"; // Calm
+        if (bloodlustText) bloodlustText.className = "text-cyan-400 font-bold";
+    }
+}
+        
     } catch (error) {
         console.error("Master System: Error fetching live data:", error);
     }
