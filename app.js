@@ -30,12 +30,18 @@ async function fetchMarketData() {
         
         const liveBid = parseFloat(data.current_price || "4586.11");
         
-        // Update Price (works on any page that has this ID)
-        const spotPriceElem = document.getElementById('live-spot-price');
-        if (spotPriceElem) {
-            spotPriceElem.textContent = liveBid.toFixed(2);
-            spotPriceElem.style.color = "#4cd7f6"; 
-        }
+        // Update Price (Header)
+const headerPriceElem = document.getElementById('header-price');
+if (headerPriceElem) {
+    headerPriceElem.textContent = liveBid.toFixed(2);
+}
+
+// Update Price (Compass / Kill Chain)
+const compassPriceElem = document.getElementById('compass-price');
+if (compassPriceElem) {
+    compassPriceElem.textContent = liveBid.toFixed(2);
+    compassPriceElem.style.color = "#4cd7f6"; // Glow blue
+}
 
         // Update Posture (Specifically for the HUD Page)
         const postureElem = document.getElementById('market-posture-text');
