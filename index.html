@@ -43,12 +43,11 @@
 <!-- Real-time dynamic MARKET BLOODLUST & CONDITION MATRIX threat bar -->
 <div class="flex flex-col gap-1 bg-surface-container-low p-space-sm rounded-lg mt-space-xs relative z-10 border border-error/30">
 <!-- State progression tracker & percentage telemetry -->
-<div class="flex items-center justify-between font-label-mono-sm text-label-mono-sm flex-wrap gap-1">
-<span class="text-error flex items-center gap-1 font-bold tracking-wide">
-<span class="material-symbols-outlined text-[14px] text-error animate-pulse">crisis_alert</span>
-          MARKET BLOODLUST &amp; CONDITION MATRIX
-        </span>
-<span class="text-error font-data-mono-md tracking-wider font-bold animate-pulse">98.4% EXTREME LIQUIDITY BLEED [FATAL TRAP]</span>
+<div class="flex items-center gap-2 mt-2">
+    <div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden border border-outline-variant/50">
+        <div id="bloodlust-bar" class="h-full bg-cyan-400 w-0 transition-all duration-500"></div>
+    </div>
+    <span id="bloodlust-text" class="text-xs font-mono text-cyan-400 font-bold w-10 text-right">0%</span>
 </div>
 <!-- State progression labels -->
 <div class="flex items-center justify-between font-badge-mono-xs text-[8px] uppercase tracking-wider text-on-surface-variant px-0.5 pt-1">
