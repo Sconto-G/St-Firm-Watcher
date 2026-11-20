@@ -26,16 +26,9 @@ async function fetchMarketData() {
   try {
     const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
     const response = await fetch(renderUrl, { cache: "no-store" });
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
     const data = await response.json();
-    const rawPrice = data.current_price ?? data.price ?? data.bid;
-    const parsedPrice = Number.parseFloat(rawPrice);
-    const liveBid = Number.isFinite(parsedPrice) ? parsedPrice : 3525.72;
-    const formattedPrice = liveBid.toFixed(2);
-
+      
+    
     // Update Price (Header)
     const headerPriceElem = document.getElementById("header-price");
     if (headerPriceElem) {
