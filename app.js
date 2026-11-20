@@ -58,3 +58,44 @@ async function fetchMarketData() {
 // Start the data engine
 setInterval(fetchMarketData, 5000);
 fetchMarketData(); // Run immediately on load
+// 3. DYNAMIC SESSION ENGINE
+function updateSession() {
+    const sessionElem = document.getElementById('active-session-text');
+    if (!sessionElem) return;
+
+    const now = new Date();
+    const eatHours = (now.getUTCHours() + 3) % 24; // EAT is UTC+3
+
+    let currentSession = "SYDNEY / CLOSED";
+    let colorClass = "text-gray-400";
+
+    // Define Session Times (EAT)
+    if (eatHours >= 16 || eatHours < 1) {
+        currentSession = "NEW YORK";
+        colorClass = "text-[#4cd7f6]"; // Cyan
+    } 
+    
+    if (eatHours >= 11 && eatHours < 20) {
+        currentSession = "LONDON";
+        colorClass = "text-[#ffc174]"; // Gold
+    }
+
+    // Handle Overlaps
+    if (eatHours >= 16 && eatHours < 20) {
+        currentSession = "LONDON / NY OVERLAP";
+        colorClass = "text-purple-400"; 
+    } else if (eatHours >= 11 && eatHours < 12) {
+        currentSession = "TOKYO / LONDON OVERLAP";
+        colorClass = "text-purple-400";
+    } else if (eatHours >= 3 && eatHours < 11) {
+        currentSession = "TOKYO";
+        colorClass = "text-blue-400";
+    }
+
+    sessionElem.textContent = currentSession;
+    sessionElem.className = colorClass; 
+}
+
+// Run immediately, then update every minute
+updateSession();
+setInterval(updateSession, 60000); 
