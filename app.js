@@ -28,7 +28,8 @@ async function fetchMarketData() {
     const response = await fetch(renderUrl, { cache: "no-store" });
     const data = await response.json();
       
-    
+    const liveBid = parseFloat(data.current_price || "4586.11");
+      
     // Update Price (Header)
     const headerPriceElem = document.getElementById("header-price");
     if (headerPriceElem) {
