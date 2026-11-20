@@ -68,40 +68,11 @@ async function fetchMarketData() {
     if (confidenceElem && data.confidence !== undefined && data.confidence !== null) {
       confidenceElem.textContent = `${data.confidence}%`;
     }
-
-    // Update Bloodlust Gauge
-    const bloodlustBar = document.getElementById("bloodlust-bar");
-    const bloodlustText = document.getElementById("bloodlust-text");
-    if (data.bloodlust !== undefined && data.bloodlust !== null) {
-      const level = Math.max(0, Math.min(100, Number(data.bloodlust) || 0));
-
-      if (bloodlustBar) {
-        bloodlustBar.style.width = `${level}%`;
-        if (level > 75) {
-          bloodlustBar.className = "h-full bg-red-500 transition-all duration-500";
-        } else if (level > 40) {
-          bloodlustBar.className = "h-full bg-orange-400 transition-all duration-500";
-        } else {
-          bloodlustBar.className = "h-full bg-cyan-400 transition-all duration-500";
-        }
-      }
-
-      if (bloodlustText) {
-        bloodlustText.textContent = `${level}%`;
-        if (level > 75) {
-          bloodlustText.className = "text-red-500 font-bold";
-        } else if (level > 40) {
-          bloodlustText.className = "text-orange-400 font-bold";
-        } else {
-          bloodlustText.className = "text-cyan-400 font-bold";
-        }
-      }
-    }
+    
   } catch (error) {
     console.error("Master System: Error fetching live data.", error);
   }
 }
-
 
 // Start the data engine
 setInterval(fetchMarketData, 5000);
