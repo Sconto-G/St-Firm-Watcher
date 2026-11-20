@@ -23,64 +23,85 @@ setInterval(updateEATClock, 1000);
 
 // 2. Live Market Data Fetcher (Price, Trend, Posture)
 async function fetchMarketData() {
-    try {
-        const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
-        const response = await fetch(renderUrl);
-        const data = await response.json();
-        
-        const liveBid = parseFloat(data.current_price || "4586.11");
-        
-        // Update Price (Header)
-const headerPriceElem = document.getElementById('header-price');
-if (headerPriceElem) {
-    headerPriceElem.textContent = liveBid.toFixed(2);
-}
-
-// Update Price (Compass / Kill Chain)
-const compassPriceElem = document.getElementById('compass-price');
-if (compassPriceElem) {
-    compassPriceElem.textContent = liveBid.toFixed(2);
-    compassPriceElem.style.color = "#4cd7f6"; // Glow blue
-}
-
-        // Update Posture (Specifically for the HUD Page)
-        const postureElem = document.getElementById('market-posture-text');
-        if (postureElem && data.market_posture) {
-            postureElem.textContent = data.market_posture;
-            postureElem.style.color = data.market_posture === "BUY" ? "#4cd7f6" : "#ffb4ab";
-        }
-
-        // Update Confidence (Specifically for the HUD Page)
-        const confidenceElem = document.getElementById('confidence-text');
-        if (confidenceElem && data.confidence !== undefined) {
-            confidenceElem.textContent = data.confidence + "%";
-        }
-        
-        // Update Bloodlust Gauge
-const bloodlustBar = document.getElementById('bloodlust-bar');
-const bloodlustText = document.getElementById('bloodlust-text');
-
-if (bloodlustBar && data.bloodlust !== undefined) {
-    bloodlustBar.style.width = data.bloodlust + '%';
-    if (bloodlustText) bloodlustText.innerText = data.bloodlust + '%';
-    
-    // Change color based on intensity
-    if (data.bloodlust > 75) {
-        bloodlustBar.className = "h-full bg-red-500 transition-all duration-500"; // Extreme
-        if (bloodlustText) bloodlustText.className = "text-red-500 font-bold";
-    } else if (data.bloodlust > 40) {
-        bloodlustBar.className = "h-full bg-orange-400 transition-all duration-500"; // Volatile
-        if (bloodlustText) bloodlustText.className = "text-orange-400 font-bold";
-    } else {
-        bloodlustBar.className = "h-full bg-cyan-400 transition-all duration-500"; // Calm
-        if (bloodlustText) bloodlustText.className = "text-cyan-400 font-bold";
+  try {
+    const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
+    const response = await fetch(renderUrl, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
     }
-}
-        
-    } catch (error) {
-        console.error("Master System: Error fetching live data:", error);
+
+    const data = await response.json();
+    const rawPrice = data.current_price ?? data.price ?? data.bid;
+    const parsedPrice = Number.parseFloat(rawPrice);
+    const liveBid = Number.isFinite(parsedPrice) ? parsedPrice : 3525.72;
+    const formattedPrice = liveBid.toFixed(2);
+
+    // Update Price (Header)
+    const headerPriceElem = document.getElementById("header-price");
+    if (headerPriceElem) {
+      headerPriceElem.textContent = formattedPrice;
     }
+
+    // Update Price (Compass / Kill Chain)
+    const compassPriceElem = document.getElementById("compass-price");
+    if (compassPriceElem) {
+      compassPriceElem.textContent = formattedPrice;
+      compassPriceElem.style.color = "#4cd7f6";
+    }
+
+    // Update Price (Campaign Live Tick)
+    const liveTickElem = document.getElementById("live-tick-price");
+    if (liveTickElem) {
+      liveTickElem.textContent = formattedPrice;
+    }
+
+    // Update Posture (Specifically for the HUD Page)
+    const postureElem = document.getElementById("market-posture-text");
+    if (postureElem && data.market_posture) {
+      const posture = String(data.market_posture).toUpperCase();
+      postureElem.textContent = posture;
+      postureElem.style.color = posture === "BUY" ? "#4cd7f6" : "#ffb4ab";
+    }
+
+    // Update Confidence (Specifically for the HUD Page)
+    const confidenceElem = document.getElementById("confidence-text");
+    if (confidenceElem && data.confidence !== undefined && data.confidence !== null) {
+      confidenceElem.textContent = `${data.confidence}%`;
+    }
+
+    // Update Bloodlust Gauge
+    const bloodlustBar = document.getElementById("bloodlust-bar");
+    const bloodlustText = document.getElementById("bloodlust-text");
+    if (data.bloodlust !== undefined && data.bloodlust !== null) {
+      const level = Math.max(0, Math.min(100, Number(data.bloodlust) || 0));
+
+      if (bloodlustBar) {
+        bloodlustBar.style.width = `${level}%`;
+        if (level > 75) {
+          bloodlustBar.className = "h-full bg-red-500 transition-all duration-500";
+        } else if (level > 40) {
+          bloodlustBar.className = "h-full bg-orange-400 transition-all duration-500";
+        } else {
+          bloodlustBar.className = "h-full bg-cyan-400 transition-all duration-500";
+        }
+      }
+
+      if (bloodlustText) {
+        bloodlustText.textContent = `${level}%`;
+        if (level > 75) {
+          bloodlustText.className = "text-red-500 font-bold";
+        } else if (level > 40) {
+          bloodlustText.className = "text-orange-400 font-bold";
+        } else {
+          bloodlustText.className = "text-cyan-400 font-bold";
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Master System: Error fetching live data.", error);
+  }
 }
+
 
 // Start the data engine
 setInterval(fetchMarketData, 5000);
