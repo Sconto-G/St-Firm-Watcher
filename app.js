@@ -82,6 +82,28 @@ if (bloodlustBar && data.bloodlust !== undefined) {
         if (bloodlustText) bloodlustText.className = "text-cyan-400 font-bold";
     }
 }
+              // Update Institutional Metrics HUD
+        const hud = data.institutional_hud || {};
+        const setHudText = (id, val) => {
+          const el = document.getElementById(id);
+          if (el && val !== undefined && val !== null) el.textContent = val;
+        };
+
+        setHudText("hud-weekly-open", hud.weekly_open ?? "2410.50");
+        setHudText("hud-weekly-bias", hud.weekly_bias_text ?? "-1.07% RED BIAS");
+        setHudText("hud-pdh-price", hud.pdh_price ?? "2415.80");
+        setHudText("hud-pdh-status", hud.pdh_status ?? "SWEPT ✓");
+        setHudText("hud-pdh-sub", hud.pdh_subtext ?? "BUY-STOPS PURGED");
+        setHudText("hud-pdl-price", hud.pdl_price ?? "2378.20");
+        setHudText("hud-pdl-badge", hud.pdl_badge ?? "MAGNET");
+        setHudText("hud-pdl-sub", hud.pdl_subtext ?? "RUN EXPECTED D1");
+
+        const fuelPct = Math.max(0, Math.min(100, Number(hud.fuel_pct ?? data.bloodlust ?? 78)));
+        setHudText("hud-fuel-pct", hud.fuel_label ?? `${fuelPct}% USED`);
+        setHudText("hud-fuel-pips", hud.fuel_pips_text ?? "142 / 182 PIPS EXP");
+
+        const fuelBar = document.getElementById("hud-fuel-bar");
+        if (fuelBar) fuelBar.style.width = `${fuelPct}%`;
     
   } catch (error) {
     console.error("Master System: Error fetching live data.", error);
