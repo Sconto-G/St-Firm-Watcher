@@ -1,6 +1,6 @@
 // --- ST-FIRM MASTER NERVOUS SYSTEM ---
 
-// 1. Live EAT Clock
+// 1. LIVE EAT CLOCK
 function updateEATClock() {
     const clockElements = document.querySelectorAll('.eat-live-clock');
     if (clockElements.length === 0) return;
@@ -19,7 +19,7 @@ function updateEATClock() {
 }
 setInterval(updateEATClock, 1000);
 
-// 2. Live Market Data Fetcher
+// 2. LIVE MARKET DATA FETCHER
 async function fetchMarketData() {
     try {
         const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
@@ -78,8 +78,6 @@ async function fetchMarketData() {
         console.error("Master System: Error fetching live data:", error);
     }
 }
-
-// Start the data engine
 setInterval(fetchMarketData, 5000);
 fetchMarketData(); 
 
@@ -118,6 +116,72 @@ function updateSession() {
     sessionElem.textContent = currentSession;
     sessionElem.className = colorClass + " font-bold uppercase tracking-wider text-xs";
 }
-
 updateSession();
 setInterval(updateSession, 60000); 
+
+// 4. LIVE NEWS TICKER ENGINE
+function updateNewsTicker() {
+    const ticker = document.getElementById('news-ticker-content');
+    if (!ticker) return;
+
+    const now = new Date();
+    
+    // Helper to format time as HH:MM
+    const formatTime = (date) => {
+        const h = String(date.getHours()).padStart(2, '0');
+        const m = String(date.getMinutes()).padStart(2, '0');
+        return `${h}:${m}`;
+    };
+
+    // Helper to add minutes
+    const addMins = (mins) => new Date(now.getTime() + mins * 60000);
+
+    // Mock Data (Replace with real API later)
+    const rawNews = [
+        { time: addMins(-30), impact: "LOW", title: "EU Retail Sales m/m" }, 
+        { time: addMins(15), impact: "HIGH", title: "US CPI m/m" },          
+        { time: addMins(45), impact: "MEDIUM", title: "FOMC Member Speech" },
+        { time: addMins(120), impact: "HIGH", title: "US Non-Farm Payrolls" },
+        { time: addMins(240), impact: "LOW", title: "US Crude Oil Inventories" }
+    ];
+
+    // Filter out past news
+    const upcomingNews = rawNews.filter(news => news.time > now);
+
+    if (upcomingNews.length === 0) {
+        ticker.innerHTML = `<span class="text-gray-500">No more high-impact news for today.</span>`;
+        return;
+    }
+
+    let newsHTML = "";
+    upcomingNews.forEach((item, index) => {
+        let colorClass = "text-[#4cd7f6]"; 
+        let icon = "🟢";
+        
+        if (item.impact === "HIGH") {
+            colorClass = "text-[#ffb4ab] drop-shadow-[0_0_8px_rgba(255,180,171,0.5)]"; 
+            icon = "🔴";
+        } else if (item.impact === "MEDIUM") {
+            colorClass = "text-orange-400"; 
+            icon = "🟠";
+        }
+
+        const divider = index < upcomingNews.length - 1 ? `<span class="text-gray-600 mx-4">|</span>` : "";
+
+        newsHTML += `
+            <div class="flex items-center gap-2">
+                <span class="${colorClass} font-bold text-[12px]">${icon} ${formatTime(item.time)} EAT - ${item.title}</span>
+                ${divider}
+            </div>
+        `;
+    });
+
+    ticker.innerHTML = newsHTML;
+    
+    // Restart animation
+    ticker.style.animation = 'none';
+    ticker.offsetHeight; 
+    ticker.style.animation = null; 
+}
+updateNewsTicker();
+setInterval(updateNewsTicker, 60000);
