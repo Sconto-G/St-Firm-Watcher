@@ -119,69 +119,57 @@ function updateSession() {
 updateSession();
 setInterval(updateSession, 60000); 
 
-// 4. LIVE NEWS TICKER ENGINE
-function updateNewsTicker() {
+// 4. LIVE FOREX FACTORY NEWS TICKER
+async function updateNewsTicker() {
     const ticker = document.getElementById('news-ticker-content');
     if (!ticker) return;
 
-    const now = new Date();
-    
-    // Helper to format time as HH:MM
-    const formatTime = (date) => {
-        const h = String(date.getHours()).padStart(2, '0');
-        const m = String(date.getMinutes()).padStart(2, '0');
-        return `${h}:${m}`;
-    };
+    try {
+        const response = await fetch("https://st-firm-backend.onrender.com/api/v1/news/calendar");
+        const data = await response.json();
 
-    // Helper to add minutes
-    const addMins = (mins) => new Date(now.getTime() + mins * 60000);
-
-    // Mock Data (Replace with real API later)
-    const rawNews = [
-        { time: addMins(-30), impact: "LOW", title: "EU Retail Sales m/m" }, 
-        { time: addMins(15), impact: "HIGH", title: "US CPI m/m" },          
-        { time: addMins(45), impact: "MEDIUM", title: "FOMC Member Speech" },
-        { time: addMins(120), impact: "HIGH", title: "US Non-Farm Payrolls" },
-        { time: addMins(240), impact: "LOW", title: "US Crude Oil Inventories" }
-    ];
-
-    // Filter out past news
-    const upcomingNews = rawNews.filter(news => news.time > now);
-
-    if (upcomingNews.length === 0) {
-        ticker.innerHTML = `<span class="text-gray-500">No more high-impact news for today.</span>`;
-        return;
-    }
-
-    let newsHTML = "";
-    upcomingNews.forEach((item, index) => {
-        let colorClass = "text-[#4cd7f6]"; 
-        let icon = "🟢";
-        
-        if (item.impact === "HIGH") {
-            colorClass = "text-[#ffb4ab] drop-shadow-[0_0_8px_rgba(255,180,171,0.5)]"; 
-            icon = "🔴";
-        } else if (item.impact === "MEDIUM") {
-            colorClass = "text-orange-400"; 
-            icon = "🟠";
+        if (data.status !== "success" || !data.news || data.news.length === 0) {
+            ticker.innerHTML = `<span class="text-gray-500 px-4">No upcoming high-impact news for today. Trade with caution.</span>`;
+            return;
         }
 
-        const divider = index < upcomingNews.length - 1 ? `<span class="text-gray-600 mx-4">|</span>` : "";
+        let newsHTML = "";
+        data.news.forEach((item, index) => {
+            let colorClass = "text-[#4cd7f6]"; 
+            let icon = "🟡";
+            
+            if (item.impact === "High") {
+                colorClass = "text-[#ffb4ab] drop-shadow-[0_0_8px_rgba(255,180,171,0.5)]"; 
+                icon = "🔴";
+            } else if (item.impact === "Medium") {
+                colorClass = "text-orange-400"; 
+                icon = "🟠";
+            }
 
-        newsHTML += `
-            <div class="flex items-center gap-2">
-                <span class="${colorClass} font-bold text-[12px]">${icon} ${formatTime(item.time)} EAT - ${item.title}</span>
-                ${divider}
-            </div>
-        `;
-    });
+            const divider = index < data.news.length - 1 ? `<span class="text-gray-600 mx-4">|</span>` : "";
 
-    ticker.innerHTML = newsHTML;
-    
-    // Restart animation
-    ticker.style.animation = 'none';
-    ticker.offsetHeight; 
-    ticker.style.animation = null; 
+            newsHTML += `
+                <div class="flex items-center gap-2 px-2">
+                    <span class="${colorClass} font-bold text-[12px]">${icon} ${item.time} EAT - [${item.country}] ${item.title}</span>
+                    ${divider}
+                </div>
+            `;
+        });
+
+        // Inject the live news into the ticker
+        ticker.innerHTML = newsHTML;
+        
+        // Restart the scrolling animation
+        ticker.style.animation = 'none';
+        ticker.offsetHeight; 
+        ticker.style.animation = null; 
+
+    } catch (error) {
+        console.error("News Engine Error:", error);
+        ticker.innerHTML = `<span class="text-gray-500 px-4">News radar offline. Reconnecting...</span>`;
+    }
 }
+
+// Run immediately, then update every 5 minutes
 updateNewsTicker();
-setInterval(updateNewsTicker, 60000);
+setInterval(updateNewsTicker, 300000); 
