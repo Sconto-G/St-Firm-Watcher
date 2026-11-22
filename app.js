@@ -106,6 +106,35 @@ async function fetchMarketData() {
         }
         
     } catch (error) {
+        // --- UPDATE KILL CHAIN TIMEFRAMES ---
+if (data.timeframes) {
+    // Helper function to update the UI
+    const updateTF = (id, trend, bias) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        
+        if (bias === "BULLISH" || trend === "UPTREND") {
+            el.textContent = "BULL";
+            el.className = "text-xs font-bold text-[#4cd7f6] drop-shadow-[0_0_5px_rgba(76,215,246,0.5)]";
+        } else if (bias === "BEARISH" || trend === "DOWNTREND") {
+            el.textContent = "BEAR";
+            el.className = "text-xs font-bold text-[#ffb4ab] drop-shadow-[0_0_5px_rgba(255,180,171,0.5)]";
+        } else {
+            el.textContent = "WAIT";
+            el.className = "text-xs font-bold text-gray-500";
+        }
+    };
+
+    // Map the backend data to our new HTML IDs
+    const tf = data.timeframes;
+    
+    if (tf["M5"]) updateTF("tf-1m", tf["M5"].trend, tf["M5"].bias); 
+    if (tf["M5"]) updateTF("tf-5m", tf["M5"].trend, tf["M5"].bias);
+    if (tf["M30"]) updateTF("tf-15m", tf["M30"].trend, tf["M30"].bias);
+    if (tf["M30"]) updateTF("tf-30m", tf["M30"].trend, tf["M30"].bias);
+    if (tf["H1"]) updateTF("tf-1h", tf["H1"].trend, tf["H1"].bias);
+    if (tf["D1"]) updateTF("tf-1d", tf["D1"].trend, tf["D1"].bias);
+}
         console.error("Master System: Error fetching live data:", error);
     }
 }
