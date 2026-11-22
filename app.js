@@ -233,3 +233,57 @@ async function updateNewsTicker() {
 // Run immediately, then update every 5 minutes
 updateNewsTicker();
 setInterval(updateNewsTicker, 300000); 
+// 5. OVERLORD COGNITIVE FEED ENGINE
+let lastLoggedState = "";
+let lastLoggedPosture = "";
+
+function updateCognitiveFeed(data) {
+    const container = document.getElementById('ai-feed-container');
+    if (!container) return;
+
+    const now = new Date();
+    const timeStr = `[${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}]`;
+    
+    let newLog = null;
+
+    // Logic 1: Posture Change
+    if (data.market_posture && data.market_posture !== lastLoggedPosture) {
+        lastLoggedPosture = data.market_posture;
+        if (data.market_posture === "BUY") {
+            newLog = { text: `${timeStr} 🟢 Neural Confluence: BULLISH flip detected. Posture updated to BUY.`, color: "text-[#4cd7f6]" };
+        } else if (data.market_posture === "SELL") {
+            newLog = { text: `${timeStr} 🔴 Neural Confluence: BEARISH flip detected. Posture updated to SELL.`, color: "text-[#ffb4ab]" };
+        }
+    }
+
+    // Logic 2: Strategy State Change
+    if (data.strategy && data.strategy.playbook_state && data.strategy.playbook_state !== lastLoggedState) {
+        lastLoggedState = data.strategy.playbook_state;
+        
+        if (data.strategy.playbook_state.includes("READY")) {
+            newLog = { text: `${timeStr} 🎯 ALERT: Target zone breached. ${data.strategy.playbook_state}`, color: "text-[#ffc174] animate-pulse" };
+        } else if (data.strategy.playbook_state.includes("BLEED")) {
+            newLog = { text: `${timeStr} ⚠️ Institutional manipulation active. ${data.strategy.playbook_state}`, color: "text-[#ffb4ab]" };
+        } else {
+            newLog = { text: `${timeStr} ℹ️ Playbook phase: ${data.strategy.playbook_state}`, color: "text-gray-400" };
+        }
+    }
+
+    // Logic 3: High Bloodlust
+    if (data.bloodlust > 75 && Math.random() > 0.8) { 
+        newLog = { text: `${timeStr} ⚡ EXTREME VOLATILITY: Bloodlust at ${data.bloodlust}%. Retail stops being hunted.`, color: "text-orange-400" };
+    }
+
+    // Inject the log if a condition was met
+    if (newLog) {
+        const logDiv = document.createElement('div');
+        logDiv.className = newLog.color;
+        logDiv.innerHTML = newLog.text;
+        
+        container.prepend(logDiv);
+        
+        if (container.children.length > 5) {
+            container.removeChild(container.lastChild);
+        }
+    }
+}
