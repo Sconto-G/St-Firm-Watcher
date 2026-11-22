@@ -26,35 +26,31 @@ async function fetchMarketData() {
         const response = await fetch(renderUrl);
         const data = await response.json();
         
-        const liveBid = parseFloat(data.current_price || "4586.11");
+        const liveBid = parseFloat(data.current_price || "3525.78");
         
-        // Update Header Price
+        // --- Update Prices ---
         const headerPriceElem = document.getElementById('header-price');
-        if (headerPriceElem) {
-            headerPriceElem.textContent = liveBid.toFixed(2);
-        }
+        if (headerPriceElem) headerPriceElem.textContent = liveBid.toFixed(2);
 
-        // Update Compass Price
         const compassPriceElem = document.getElementById('compass-price');
         if (compassPriceElem) {
             compassPriceElem.textContent = liveBid.toFixed(2);
             compassPriceElem.style.color = "#4cd7f6"; 
         }
 
-        // Update Posture
+        // --- Update Posture & Confidence ---
         const postureElem = document.getElementById('market-posture-text');
         if (postureElem && data.market_posture) {
             postureElem.textContent = data.market_posture;
             postureElem.style.color = data.market_posture === "BUY" ? "#4cd7f6" : "#ffb4ab";
         }
 
-        // Update Confidence
         const confidenceElem = document.getElementById('confidence-text');
         if (confidenceElem && data.confidence !== undefined) {
             confidenceElem.textContent = data.confidence + "%";
         }
 
-        // Update Bloodlust Gauge
+        // --- Update Bloodlust Gauge ---
         const bloodlustBar = document.getElementById('bloodlust-bar');
         const bloodlustText = document.getElementById('bloodlust-text');
         
@@ -73,12 +69,47 @@ async function fetchMarketData() {
                 if (bloodlustText) bloodlustText.className = "text-cyan-400 font-bold";
             }
         }
+
+        // --- Update Kill Chain Strategy (The Playbook) ---
+        if (data.strategy) {
+            const tacticalElem = document.getElementById('tactical-posture-text');
+            const targetElem = document.getElementById('target-lock-text');
+            const telemetryElem = document.getElementById('range-telemetry-text');
+            const killZoneElem = document.getElementById('kill-zone-text');
+
+            if (tacticalElem && data.market_posture) {
+                tacticalElem.textContent = `${data.market_posture} (${data.confidence}%)`;
+                tacticalElem.style.color = data.market_posture === "BUY" ? "#4cd7f6" : "#ffb4ab";
+            }
+
+            if (targetElem) {
+                targetElem.textContent = `${data.strategy.target_name} (${parseFloat(data.strategy.target_level).toFixed(2)})`;
+            }
+
+            if (telemetryElem) {
+                const dist = data.strategy.distance_pips;
+                telemetryElem.textContent = dist + " PIPS";
+                telemetryElem.style.color = dist <= 2.0 ? "#ffc174" : "#dee2ee"; 
+            }
+
+            if (killZoneElem) {
+                killZoneElem.textContent = data.strategy.playbook_state;
+                
+                if (data.strategy.playbook_state.includes("READY")) {
+                    killZoneElem.style.color = "#4cd7f6"; // Cyan glow
+                } else if (data.strategy.playbook_state.includes("BLEED")) {
+                    killZoneElem.style.color = "#ffb4ab"; // Red warning
+                } else {
+                    killZoneElem.style.color = "#8e95a3"; // Gray waiting
+                }
+            }
+        }
         
     } catch (error) {
         console.error("Master System: Error fetching live data:", error);
     }
 }
-setInterval(fetchMarketData, 1000);
+setInterval(fetchMarketData, 1000); // 1-second refresh for sniper accuracy
 fetchMarketData(); 
 
 // 3. DYNAMIC SESSION ENGINE
@@ -172,4 +203,4 @@ async function updateNewsTicker() {
 
 // Run immediately, then update every 5 minutes
 updateNewsTicker();
-setInterval(updateNewsTicker, 600000); 
+setInterval(updateNewsTicker, 300000); 
