@@ -106,6 +106,8 @@ async function fetchMarketData() {
         }
         
     } catch (error) {
+        // Trigger the AI Cognitive Feed
+updateCognitiveFeed(data);
         // --- UPDATE KILL CHAIN TIMEFRAMES ---
 if (data.timeframes) {
     // Helper function to update the UI
