@@ -78,7 +78,7 @@ async function fetchMarketData() {
         console.error("Master System: Error fetching live data:", error);
     }
 }
-setInterval(fetchMarketData, 5000);
+setInterval(fetchMarketData, 1000);
 fetchMarketData(); 
 
 // 3. DYNAMIC SESSION ENGINE
@@ -172,4 +172,4 @@ async function updateNewsTicker() {
 
 // Run immediately, then update every 5 minutes
 updateNewsTicker();
-setInterval(updateNewsTicker, 300000); 
+setInterval(updateNewsTicker, 600000); 
