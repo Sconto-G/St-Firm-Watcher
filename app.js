@@ -4,134 +4,106 @@
 function updateEATClock() {
     const clockElements = document.querySelectorAll('.eat-live-clock');
     if (clockElements.length === 0) return;
-    
     const now = new Date();
     const eatHours = (now.getUTCHours() + 3) % 24;
-    const minutes = String(now.getUTCMinutes()).padStart(2, '0');
-    const seconds = String(now.getUTCSeconds()).padStart(2, '0');
-    const hours = String(eatHours).padStart(2, '0');
-    
-    const timeString = `EAT ${hours}:${minutes}:${seconds} NAIROBI (UTC+3)`;
-    
-    clockElements.forEach(el => {
-        el.textContent = timeString;
-    });
+    const timeString = `EAT ${String(eatHours).padStart(2, '0')}:${String(now.getUTCMinutes()).padStart(2, '0')}:${String(now.getUTCSeconds()).padStart(2, '0')} NAIROBI (UTC+3)`;
+    clockElements.forEach(el => el.textContent = timeString);
 }
 setInterval(updateEATClock, 1000);
 
-// 2. LIVE MARKET DATA FETCHER
+// 2. LIVE MARKET DATA
 async function fetchMarketData() {
     try {
-        const renderUrl = "https://st-firm-backend.onrender.com/api/v1/market/xauusd";
-        const response = await fetch(renderUrl);
+        const response = await fetch("https://st-firm-backend.onrender.com/api/v1/market/xauusd");
         const data = await response.json();
         
-        const liveBid = parseFloat(data.current_price || "3525.78");
+        const liveBid = parseFloat(data.current_price || "0.00");
         
         // --- Update Prices ---
         const headerPriceElem = document.getElementById('header-price');
         if (headerPriceElem) headerPriceElem.textContent = liveBid.toFixed(2);
-
         const compassPriceElem = document.getElementById('compass-price');
-        if (compassPriceElem) {
-            compassPriceElem.textContent = liveBid.toFixed(2);
-            compassPriceElem.style.color = "#4cd7f6"; 
-        }
+        if (compassPriceElem) { compassPriceElem.textContent = liveBid.toFixed(2); compassPriceElem.style.color = "#4cd7f6"; }
 
-        // --- Update Posture & Confidence ---
-        const postureElem = document.getElementById('market-posture-text');
-        if (postureElem && data.market_posture) {
-            postureElem.textContent = data.market_posture;
-            postureElem.style.color = data.market_posture === "BUY" ? "#4cd7f6" : "#ffb4ab";
-        }
-
-        const confidenceElem = document.getElementById('confidence-text');
-        if (confidenceElem && data.confidence !== undefined) {
-            confidenceElem.textContent = data.confidence + "%";
-        }
-
-        // --- Update Bloodlust Gauge ---
+        // --- Update Bloodlust ---
         const bloodlustBar = document.getElementById('bloodlust-bar');
         const bloodlustText = document.getElementById('bloodlust-text');
-        
         if (bloodlustBar && data.bloodlust !== undefined) {
             bloodlustBar.style.width = data.bloodlust + '%';
             if (bloodlustText) bloodlustText.innerText = data.bloodlust + '%';
-            
-            if (data.bloodlust > 75) {
-                bloodlustBar.className = "h-full bg-red-500 transition-all duration-500";
-                if (bloodlustText) bloodlustText.className = "text-red-500 font-bold";
-            } else if (data.bloodlust > 40) {
-                bloodlustBar.className = "h-full bg-orange-400 transition-all duration-500";
-                if (bloodlustText) bloodlustText.className = "text-orange-400 font-bold";
-            } else {
-                bloodlustBar.className = "h-full bg-cyan-400 transition-all duration-500";
-                if (bloodlustText) bloodlustText.className = "text-cyan-400 font-bold";
-            }
+            if (data.bloodlust > 75) { bloodlustBar.className = "h-full bg-red-500 transition-all duration-500"; if (bloodlustText) bloodlustText.className = "text-red-500 font-bold"; }
+            else if (data.bloodlust > 40) { bloodlustBar.className = "h-full bg-orange-400 transition-all duration-500"; if (bloodlustText) bloodlustText.className = "text-orange-400 font-bold"; }
+            else { bloodlustBar.className = "h-full bg-cyan-400 transition-all duration-500"; if (bloodlustText) bloodlustText.className = "text-cyan-400 font-bold"; }
         }
 
-        // --- Update Kill Chain Strategy (The Playbook) ---
-        if (data.strategy) {
-            const tacticalElem = document.getElementById('tactical-posture-text');
-            const targetElem = document.getElementById('target-lock-text');
-            const telemetryElem = document.getElementById('range-telemetry-text');
-            const killZoneElem = document.getElementById('kill-zone-text');
-
-            if (tacticalElem && data.market_posture) {
-                tacticalElem.textContent = `${data.market_posture} (${data.confidence}%)`;
-                tacticalElem.style.color = data.market_posture === "BUY" ? "#4cd7f6" : "#ffb4ab";
-            }
-
-            if (targetElem) {
-                targetElem.textContent = `${data.strategy.target_name} (${parseFloat(data.strategy.target_level).toFixed(2)})`;
-            }
-
-            if (telemetryElem) {
-                const dist = data.strategy.distance_pips;
-                telemetryElem.textContent = dist + " PIPS";
-                telemetryElem.style.color = dist <= 2.0 ? "#ffc174" : "#dee2ee"; 
-            }
-
-            if (killZoneElem) {
-                killZoneElem.textContent = data.strategy.playbook_state;
-                if (data.strategy.playbook_state.includes("READY")) {
-                    killZoneElem.style.color = "#4cd7f6"; 
-                } else if (data.strategy.playbook_state.includes("BLEED")) {
-                    killZoneElem.style.color = "#ffb4ab"; 
-                } else {
-                    killZoneElem.style.color = "#8e95a3"; 
-                }
-            }
-        }
-
-        // --- UPDATE KILL CHAIN TIMEFRAMES ---
+        // --- Update Timeframes (Trend + Candle Color) ---
+        const updateTF = (id, tfData) => {
+            const el = document.getElementById(id);
+            if (!el || !tfData) return;
+            const isBull = tfData.trend === "BULL" || tfData.trend === "BULLISH" || tfData.trend === "UPTREND";
+            el.textContent = isBull ? "BULL" : "BEAR";
+            el.className = isBull ? "text-xs font-bold text-[#4cd7f6]" : "text-xs font-bold text-[#ffb4ab]";
+        };
         if (data.timeframes) {
-            const updateTF = (id, trend, bias) => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                
-                if (bias === "BULLISH" || trend === "UPTREND") {
-                    el.textContent = "BULL";
-                    el.className = "text-xs font-bold text-[#4cd7f6] drop-shadow-[0_0_5px_rgba(76,215,246,0.5)]";
-                } else if (bias === "BEARISH" || trend === "DOWNTREND") {
-                    el.textContent = "BEAR";
-                    el.className = "text-xs font-bold text-[#ffb4ab] drop-shadow-[0_0_5px_rgba(255,180,171,0.5)]";
-                } else {
-                    el.textContent = "WAIT";
-                    el.className = "text-xs font-bold text-gray-500";
-                }
-            };
-
-            const tf = data.timeframes;
-            if (tf["M5"]) updateTF("tf-1m", tf["M5"].trend, tf["M5"].bias); 
-            if (tf["M5"]) updateTF("tf-5m", tf["M5"].trend, tf["M5"].bias);
-            if (tf["M30"]) updateTF("tf-15m", tf["M30"].trend, tf["M30"].bias);
-            if (tf["M30"]) updateTF("tf-30m", tf["M30"].trend, tf["M30"].bias);
-            if (tf["H1"]) updateTF("tf-1h", tf["H1"].trend, tf["H1"].bias);
-            if (tf["D1"]) updateTF("tf-1d", tf["D1"].trend, tf["D1"].bias);
+            updateTF("tf-1m", data.timeframes["M5"]); 
+            updateTF("tf-5m", data.timeframes["M5"]);
+            updateTF("tf-15m", data.timeframes["M30"]);
+            updateTF("tf-30m", data.timeframes["M30"]);
+            updateTF("tf-1h", data.timeframes["H1"]);
+            updateTF("tf-1d", data.timeframes["H4"]);
         }
 
-        // Trigger the AI Cognitive Feed
+        // --- Update Structure & Target Lock ---
+        if (data.strategy && data.structure) {
+            const targetElem = document.getElementById('target-lock-text');
+            const killZoneElem = document.getElementById('kill-zone-text');
+            const structTrendElem = document.getElementById('structure-trend');
+            const structBosElem = document.getElementById('structure-bos');
+            const swingHighElem = document.getElementById('swing-high-text');
+            const swingLowElem = document.getElementById('swing-low-text');
+
+            if (targetElem) targetElem.textContent = `${data.strategy.target_name} (${parseFloat(data.strategy.target_level).toFixed(2)})`;
+            if (killZoneElem) killZoneElem.textContent = data.strategy.playbook_state;
+            
+            if (structTrendElem) {
+                structTrendElem.textContent = data.structure.trend;
+                structTrendElem.className = data.structure.trend === "BULLISH" ? "text-[#4cd7f6] font-bold" : "text-[#ffb4ab] font-bold";
+            }
+            if (structBosElem) structBosElem.textContent = data.structure.bos;
+            if (swingHighElem) swingHighElem.textContent = parseFloat(data.structure.swing_high).toFixed(2);
+            if (swingLowElem) swingLowElem.textContent = parseFloat(data.structure.swing_low).toFixed(2);
+        }
+
+        // --- Update Ignition Button ---
+        if (data.ignition) {
+            const ignBtn = document.getElementById('ignition-button');
+            const ignText = document.getElementById('ignition-text');
+            const ignIcon = ignBtn ? ignBtn.querySelector('.material-symbols-outlined') : null;
+            
+            if (ignBtn && ignText && ignIcon) {
+                if (data.ignition.status === "BUY") {
+                    ignBtn.className = "w-full py-3 rounded-lg border-2 border-[#4cd7f6] bg-[#4cd7f6]/10 flex items-center justify-center gap-2 transition-all duration-300 shadow-[0_0_20px_rgba(76,215,246,0.3)] animate-pulse";
+                    ignText.textContent = "IGNITION: BUY";
+                    ignText.className = "text-sm font-bold uppercase tracking-widest text-[#4cd7f6]";
+                    ignIcon.textContent = "trending_up";
+                    ignIcon.className = "material-symbols-outlined text-[#4cd7f6]";
+                } else if (data.ignition.status === "SELL") {
+                    ignBtn.className = "w-full py-3 rounded-lg border-2 border-[#ffb4ab] bg-[#ffb4ab]/10 flex items-center justify-center gap-2 transition-all duration-300 shadow-[0_0_20px_rgba(255,180,171,0.3)] animate-pulse";
+                    ignText.textContent = "IGNITION: SELL";
+                    ignText.className = "text-sm font-bold uppercase tracking-widest text-[#ffb4ab]";
+                    ignIcon.textContent = "trending_down";
+                    ignIcon.className = "material-symbols-outlined text-[#ffb4ab]";
+                } else {
+                    ignBtn.className = "w-full py-3 rounded-lg border-2 border-gray-600 bg-[#1b2028] flex items-center justify-center gap-2 transition-all duration-300";
+                    ignText.textContent = "IGNITION: WAITING";
+                    ignText.className = "text-sm font-bold uppercase tracking-widest text-gray-500";
+                    ignIcon.textContent = "power_settings_new";
+                    ignIcon.className = "material-symbols-outlined text-gray-500";
+                }
+            }
+        }
+
+        // --- Trigger AI Feed ---
         updateCognitiveFeed(data);
         
     } catch (error) {
@@ -141,145 +113,71 @@ async function fetchMarketData() {
 setInterval(fetchMarketData, 1000); 
 fetchMarketData(); 
 
-// 3. DYNAMIC SESSION ENGINE
-function updateSession() {
-    const sessionElem = document.getElementById('active-session-text');
-    if (!sessionElem) return;
-
-    const now = new Date();
-    const eatHours = (now.getUTCHours() + 3) % 24; 
-
-    let currentSession = "SYDNEY / CLOSED";
-    let colorClass = "text-gray-400";
-
-    if (eatHours >= 16 || eatHours < 1) {
-        currentSession = "NEW YORK";
-        colorClass = "text-[#4cd7f6]"; 
-    } 
-    
-    if (eatHours >= 11 && eatHours < 20) {
-        currentSession = "LONDON";
-        colorClass = "text-[#ffc174]"; 
-    }
-
-    if (eatHours >= 16 && eatHours < 20) {
-        currentSession = "LONDON / NY OVERLAP";
-        colorClass = "text-purple-400"; 
-    } else if (eatHours >= 11 && eatHours < 12) {
-        currentSession = "TOKYO / LONDON OVERLAP";
-        colorClass = "text-purple-400";
-    } else if (eatHours >= 3 && eatHours < 11) {
-        currentSession = "TOKYO";
-        colorClass = "text-blue-400";
-    }
-
-    sessionElem.textContent = currentSession;
-    sessionElem.className = colorClass + " font-bold uppercase tracking-wider text-xs";
-}
-updateSession();
-setInterval(updateSession, 60000); 
-
-// 4. LIVE FOREX FACTORY NEWS TICKER
-async function updateNewsTicker() {
-    const ticker = document.getElementById('news-ticker-content');
-    if (!ticker) return;
-
-    try {
-        const response = await fetch("https://st-firm-backend.onrender.com/api/v1/news/calendar");
-        const data = await response.json();
-
-        if (data.status !== "success" || !data.news || data.news.length === 0) {
-            ticker.innerHTML = `<span class="text-gray-500 px-4">No upcoming high-impact news for today. Trade with caution.</span>`;
-            return;
-        }
-
-        let newsHTML = "";
-        data.news.forEach((item, index) => {
-            let colorClass = "text-[#4cd7f6]"; 
-            let icon = "🟡";
-            
-            if (item.impact === "High") {
-                colorClass = "text-[#ffb4ab] drop-shadow-[0_0_8px_rgba(255,180,171,0.5)]"; 
-                icon = "🔴";
-            } else if (item.impact === "Medium") {
-                colorClass = "text-orange-400"; 
-                icon = "🟠";
-            }
-
-            const divider = index < data.news.length - 1 ? `<span class="text-gray-600 mx-4">|</span>` : "";
-
-            newsHTML += `
-                <div class="flex items-center gap-2 px-2">
-                    <span class="${colorClass} font-bold text-[12px]">${icon} ${item.time} EAT - [${item.country}] ${item.title}</span>
-                    ${divider}
-                </div>
-            `;
-        });
-
-        ticker.innerHTML = newsHTML;
-        ticker.style.animation = 'none';
-        ticker.offsetHeight; 
-        ticker.style.animation = null; 
-
-    } catch (error) {
-        console.error("News Engine Error:", error);
-        ticker.innerHTML = `<span class="text-gray-500 px-4">News radar offline. Reconnecting...</span>`;
-    }
-}
-updateNewsTicker();
-setInterval(updateNewsTicker, 300000); 
-
-// 5. OVERLORD COGNITIVE FEED ENGINE
-let lastLoggedState = "";
-let lastLoggedPosture = "";
-let lastLogTime = 0; // Add a timer
-
+// 3. AI COGNITIVE FEED (Throttled)
+let lastLogTime = 0;
 function updateCognitiveFeed(data) {
     const container = document.getElementById('ai-feed-container');
     if (!container) return;
-
-    const now = new Date();
-    const timeStr = `[${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}]`;
     const currentTime = Date.now();
-    
-    // THROTTLE: Don't log more than once every 30 seconds
-    if (currentTime - lastLogTime < 30000) return;
+    if (currentTime - lastLogTime < 15000) return; // 15s throttle
 
     let newLog = null;
+    const timeStr = `[${new Date().toLocaleTimeString('en-GB')}]`;
 
-    // Logic 1: Posture Change
-    if (data.market_posture && data.market_posture !== lastLoggedPosture) {
-        lastLoggedPosture = data.market_posture;
-        if (data.market_posture === "BUY") {
-            newLog = { text: `${timeStr} 🟢 Neural Confluence: BULLISH flip detected. Posture updated to BUY.`, color: "text-[#4cd7f6]" };
-        } else if (data.market_posture === "SELL") {
-            newLog = { text: `${timeStr} 🔴 Neural Confluence: BEARISH flip detected. Posture updated to SELL.`, color: "text-[#ffb4ab]" };
-        }
-    }
-
-    // Logic 2: Strategy State Change
-    if (data.strategy && data.strategy.playbook_state && data.strategy.playbook_state !== lastLoggedState) {
-        lastLoggedState = data.strategy.playbook_state;
-        
-        if (data.strategy.playbook_state.includes("READY")) {
-            newLog = { text: `${timeStr} 🎯 ALERT: Target zone breached. ${data.strategy.playbook_state}`, color: "text-[#ffc174] animate-pulse" };
-        } else if (data.strategy.playbook_state.includes("BLEED")) {
-            newLog = { text: `${timeStr} ⚠️ Institutional manipulation active. ${data.strategy.playbook_state}`, color: "text-[#ffb4ab]" };
-        } else {
-            newLog = { text: `${timeStr} ℹ️ Playbook phase: ${data.strategy.playbook_state}`, color: "text-gray-400" };
-        }
+    if (data.ignition && data.ignition.status !== "WAITING") {
+        newLog = { text: `${timeStr} 🎯 ${data.ignition.status} IGNITION FIRED: ${data.ignition.reason}`, color: data.ignition.status === "BUY" ? "text-[#4cd7f6]" : "text-[#ffb4ab]" };
+    } else if (data.structure && data.structure.bos !== "NONE") {
+        newLog = { text: `${timeStr} ⚠️ Structure BOS detected: ${data.structure.bos}`, color: "text-[#ffc174]" };
+    } else if (data.bloodlust > 80) {
+        newLog = { text: `${timeStr} ⚡ High volatility. Bloodlust: ${data.bloodlust}%`, color: "text-orange-400" };
     }
 
     if (newLog) {
         const logDiv = document.createElement('div');
-        logDiv.className = newLog.color;
+        logDiv.className = newLog.color + " mb-1";
         logDiv.innerHTML = newLog.text;
-        
         container.prepend(logDiv);
-        lastLogTime = currentTime; // Reset the throttle timer
-        
-        if (container.children.length > 5) {
-            container.removeChild(container.lastChild);
-        }
+        lastLogTime = currentTime;
+        if (container.children.length > 5) container.removeChild(container.lastChild);
     }
 }
+
+// 4. DYNAMIC SESSION ENGINE
+function updateSession() {
+    const sessionElem = document.getElementById('active-session-text');
+    if (!sessionElem) return;
+    const eatHours = (new Date().getUTCHours() + 3) % 24; 
+    let session = "SYDNEY", color = "text-gray-400";
+    if (eatHours >= 16 || eatHours < 1) { session = "NEW YORK"; color = "text-[#4cd7f6]"; } 
+    if (eatHours >= 11 && eatHours < 20) { session = "LONDON"; color = "text-[#ffc174]"; }
+    if (eatHours >= 16 && eatHours < 20) { session = "LDN / NY OVERLAP"; color = "text-purple-400"; }
+    else if (eatHours >= 3 && eatHours < 11) { session = "TOKYO"; color = "text-blue-400"; }
+    sessionElem.textContent = session;
+    sessionElem.className = color + " font-bold uppercase tracking-wider text-xs";
+}
+updateSession();
+setInterval(updateSession, 60000); 
+
+// 5. NEWS TICKER
+async function updateNewsTicker() {
+    const ticker = document.getElementById('news-ticker-content');
+    if (!ticker) return;
+    try {
+        const res = await fetch("https://st-firm-backend.onrender.com/api/v1/news/calendar");
+        const data = await res.json();
+        if (data.status !== "success" || !data.news || data.news.length === 0) {
+            ticker.innerHTML = `<span class="text-gray-500 px-4">No high-impact news.</span>`;
+            return;
+        }
+        let html = "";
+        data.news.forEach((item, index) => {
+            let color = item.impact === "High" ? "text-[#ffb4ab]" : "text-orange-400";
+            let icon = item.impact === "High" ? "🔴" : "🟠";
+            html += `<div class="flex items-center gap-2 px-2"><span class="${color} font-bold text-[12px]">${icon} ${item.time} - [${item.country}] ${item.title}</span>${index < data.news.length - 1 ? '<span class="text-gray-600 mx-4">|</span>' : ''}</div>`;
+        });
+        ticker.innerHTML = html;
+        ticker.style.animation = 'none'; ticker.offsetHeight; ticker.style.animation = null; 
+    } catch (e) { ticker.innerHTML = `<span class="text-gray-500 px-4">News offline.</span>`; }
+}
+updateNewsTicker();
+setInterval(updateNewsTicker, 300000); 
