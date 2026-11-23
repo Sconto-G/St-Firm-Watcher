@@ -94,53 +94,51 @@ async function fetchMarketData() {
 
             if (killZoneElem) {
                 killZoneElem.textContent = data.strategy.playbook_state;
-                
                 if (data.strategy.playbook_state.includes("READY")) {
-                    killZoneElem.style.color = "#4cd7f6"; // Cyan glow
+                    killZoneElem.style.color = "#4cd7f6"; 
                 } else if (data.strategy.playbook_state.includes("BLEED")) {
-                    killZoneElem.style.color = "#ffb4ab"; // Red warning
+                    killZoneElem.style.color = "#ffb4ab"; 
                 } else {
-                    killZoneElem.style.color = "#8e95a3"; // Gray waiting
+                    killZoneElem.style.color = "#8e95a3"; 
                 }
             }
         }
+
+        // --- UPDATE KILL CHAIN TIMEFRAMES ---
+        if (data.timeframes) {
+            const updateTF = (id, trend, bias) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                
+                if (bias === "BULLISH" || trend === "UPTREND") {
+                    el.textContent = "BULL";
+                    el.className = "text-xs font-bold text-[#4cd7f6] drop-shadow-[0_0_5px_rgba(76,215,246,0.5)]";
+                } else if (bias === "BEARISH" || trend === "DOWNTREND") {
+                    el.textContent = "BEAR";
+                    el.className = "text-xs font-bold text-[#ffb4ab] drop-shadow-[0_0_5px_rgba(255,180,171,0.5)]";
+                } else {
+                    el.textContent = "WAIT";
+                    el.className = "text-xs font-bold text-gray-500";
+                }
+            };
+
+            const tf = data.timeframes;
+            if (tf["M5"]) updateTF("tf-1m", tf["M5"].trend, tf["M5"].bias); 
+            if (tf["M5"]) updateTF("tf-5m", tf["M5"].trend, tf["M5"].bias);
+            if (tf["M30"]) updateTF("tf-15m", tf["M30"].trend, tf["M30"].bias);
+            if (tf["M30"]) updateTF("tf-30m", tf["M30"].trend, tf["M30"].bias);
+            if (tf["H1"]) updateTF("tf-1h", tf["H1"].trend, tf["H1"].bias);
+            if (tf["D1"]) updateTF("tf-1d", tf["D1"].trend, tf["D1"].bias);
+        }
+
+        // Trigger the AI Cognitive Feed
+        updateCognitiveFeed(data);
         
     } catch (error) {
-        // Trigger the AI Cognitive Feed
-updateCognitiveFeed(data);
-        // --- UPDATE KILL CHAIN TIMEFRAMES ---
-if (data.timeframes) {
-    // Helper function to update the UI
-    const updateTF = (id, trend, bias) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        
-        if (bias === "BULLISH" || trend === "UPTREND") {
-            el.textContent = "BULL";
-            el.className = "text-xs font-bold text-[#4cd7f6] drop-shadow-[0_0_5px_rgba(76,215,246,0.5)]";
-        } else if (bias === "BEARISH" || trend === "DOWNTREND") {
-            el.textContent = "BEAR";
-            el.className = "text-xs font-bold text-[#ffb4ab] drop-shadow-[0_0_5px_rgba(255,180,171,0.5)]";
-        } else {
-            el.textContent = "WAIT";
-            el.className = "text-xs font-bold text-gray-500";
-        }
-    };
-
-    // Map the backend data to our new HTML IDs
-    const tf = data.timeframes;
-    
-    if (tf["M5"]) updateTF("tf-1m", tf["M5"].trend, tf["M5"].bias); 
-    if (tf["M5"]) updateTF("tf-5m", tf["M5"].trend, tf["M5"].bias);
-    if (tf["M30"]) updateTF("tf-15m", tf["M30"].trend, tf["M30"].bias);
-    if (tf["M30"]) updateTF("tf-30m", tf["M30"].trend, tf["M30"].bias);
-    if (tf["H1"]) updateTF("tf-1h", tf["H1"].trend, tf["H1"].bias);
-    if (tf["D1"]) updateTF("tf-1d", tf["D1"].trend, tf["D1"].bias);
-}
         console.error("Master System: Error fetching live data:", error);
     }
 }
-setInterval(fetchMarketData, 1000); // 1-second refresh for sniper accuracy
+setInterval(fetchMarketData, 1000); 
 fetchMarketData(); 
 
 // 3. DYNAMIC SESSION ENGINE
@@ -218,10 +216,7 @@ async function updateNewsTicker() {
             `;
         });
 
-        // Inject the live news into the ticker
         ticker.innerHTML = newsHTML;
-        
-        // Restart the scrolling animation
         ticker.style.animation = 'none';
         ticker.offsetHeight; 
         ticker.style.animation = null; 
@@ -231,10 +226,9 @@ async function updateNewsTicker() {
         ticker.innerHTML = `<span class="text-gray-500 px-4">News radar offline. Reconnecting...</span>`;
     }
 }
-
-// Run immediately, then update every 5 minutes
 updateNewsTicker();
 setInterval(updateNewsTicker, 300000); 
+
 // 5. OVERLORD COGNITIVE FEED ENGINE
 let lastLoggedState = "";
 let lastLoggedPosture = "";
@@ -276,7 +270,6 @@ function updateCognitiveFeed(data) {
         newLog = { text: `${timeStr} ⚡ EXTREME VOLATILITY: Bloodlust at ${data.bloodlust}%. Retail stops being hunted.`, color: "text-orange-400" };
     }
 
-    // Inject the log if a condition was met
     if (newLog) {
         const logDiv = document.createElement('div');
         logDiv.className = newLog.color;
@@ -288,4 +281,4 @@ function updateCognitiveFeed(data) {
             container.removeChild(container.lastChild);
         }
     }
-}
+    }
