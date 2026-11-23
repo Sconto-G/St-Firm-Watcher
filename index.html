@@ -172,14 +172,29 @@
             <div class="text-[10px] text-gray-400 font-mono">TARGET LOCK</div>
             <div id="target-lock-text" class="text-sm font-bold text-primary mt-1">WAITING (0.00)</div>
         </div>
-        <div class="bg-surface-container border border-outline-variant p-2 rounded-lg">
-            <div class="text-[10px] text-gray-400 font-mono">RANGE TELEMETRY</div>
-            <div id="range-telemetry-text" class="text-sm font-bold text-white mt-1">0 PIPS</div>
-        </div>
-        <div class="bg-surface-container border border-outline-variant p-2 rounded-lg">
-            <div class="text-[10px] text-gray-400 font-mono">KILL ZONE STATUS</div>
-            <div id="kill-zone-text" class="text-sm font-bold text-gray-400 mt-1">WAITING FOR SETUP</div>
-        </div>
+        <!-- Structure Matrix -->
+<div class="bg-surface-container border border-outline-variant p-2 rounded-lg">
+    <div class="text-[10px] text-gray-400 font-mono flex justify-between">STRUCTURE <span id="structure-trend" class="text-[#4cd7f6] font-bold">RANGE</span></div>
+    <div class="flex justify-between mt-1 text-xs font-mono">
+        <span class="text-gray-500">BOS:</span>
+        <span id="structure-bos" class="font-bold text-white">NONE</span>
+    </div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-2 rounded-lg">
+    <div class="text-[10px] text-gray-400 font-mono flex justify-between">SWINGS <span class="text-[9px]">H / L</span></div>
+    <div class="flex justify-between mt-1 text-xs font-mono">
+        <span id="swing-high-text" class="text-[#4cd7f6] font-bold">----.--</span>
+        <span id="swing-low-text" class="text-[#ffb4ab] font-bold">----.--</span>
+    </div>
+</div>
+
+<!-- IGNITION BUTTON -->
+<div class="col-span-2 mt-2">
+    <div id="ignition-button" class="w-full py-3 rounded-lg border-2 border-gray-600 bg-[#1b2028] flex items-center justify-center gap-2 transition-all duration-300">
+        <span class="material-symbols-outlined text-gray-500">power_settings_new</span>
+        <span id="ignition-text" class="text-sm font-bold uppercase tracking-widest text-gray-500">IGNITION: WAITING</span>
+    </div>
+</div>
     </div>
 </div>
 <!-- Right Column: PREDATOR AI FEED (Cognitive Terminal Window) -->
