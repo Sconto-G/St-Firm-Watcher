@@ -232,6 +232,7 @@ setInterval(updateNewsTicker, 300000);
 // 5. OVERLORD COGNITIVE FEED ENGINE
 let lastLoggedState = "";
 let lastLoggedPosture = "";
+let lastLogTime = 0; // Add a timer
 
 function updateCognitiveFeed(data) {
     const container = document.getElementById('ai-feed-container');
@@ -239,7 +240,11 @@ function updateCognitiveFeed(data) {
 
     const now = new Date();
     const timeStr = `[${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}]`;
+    const currentTime = Date.now();
     
+    // THROTTLE: Don't log more than once every 30 seconds
+    if (currentTime - lastLogTime < 30000) return;
+
     let newLog = null;
 
     // Logic 1: Posture Change
@@ -265,20 +270,16 @@ function updateCognitiveFeed(data) {
         }
     }
 
-    // Logic 3: High Bloodlust
-    if (data.bloodlust > 75 && Math.random() > 0.8) { 
-        newLog = { text: `${timeStr} ⚡ EXTREME VOLATILITY: Bloodlust at ${data.bloodlust}%. Retail stops being hunted.`, color: "text-orange-400" };
-    }
-
     if (newLog) {
         const logDiv = document.createElement('div');
         logDiv.className = newLog.color;
         logDiv.innerHTML = newLog.text;
         
         container.prepend(logDiv);
+        lastLogTime = currentTime; // Reset the throttle timer
         
         if (container.children.length > 5) {
             container.removeChild(container.lastChild);
         }
     }
-    }
+}
