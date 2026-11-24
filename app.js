@@ -1,3 +1,13 @@
+function updateEATClock() {
+    const clockElements = document.querySelectorAll('.eat-live-clock');
+    if (clockElements.length === 0) return;
+    const now = new Date();
+    const eatHours = (now.getUTCHours() + 3) % 24;
+    const timeString = `EAT ${String(eatHours).padStart(2, '0')}:${String(now.getUTCMinutes()).padStart(2, '0')}:${String(now.getUTCSeconds()).padStart(2, '0')} NAIROBI (UTC+3)`;
+    clockElements.forEach(el => el.textContent = timeString);
+}
+setInterval(updateEATClock, 1000);
+updateEATClock();
 async function fetchMarketData() {
     try {
         const response = await fetch("https://st-firm-backend.onrender.com/api/v1/market/xauusd");
