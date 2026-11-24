@@ -162,39 +162,47 @@
         </div>
     </div>
 
-    <!-- Bottom Grid -->
-    <div class="grid grid-cols-2 gap-2 w-full mt-4 z-10">
-        <div class="bg-surface-container border border-outline-variant p-2 rounded-lg">
-            <div class="text-[10px] text-gray-400 font-mono">TACTICAL POSTURE</div>
-            <div id="tactical-posture-text" class="text-sm font-bold text-error mt-1">WAITING (0%)</div>
+    <!-- Bottom Grid: Execution & Predator Eyes -->
+<div class="grid grid-cols-2 gap-2 w-full mt-4 z-10">
+    <!-- Execution Gate -->
+    <div class="bg-surface-container border border-outline-variant p-2 rounded-lg col-span-2">
+        <div class="text-[10px] text-gray-400 font-mono flex justify-between">
+            EXECUTION GATE
+            <span id="gate-status" class="text-error font-bold animate-pulse">SCANNING</span>
         </div>
-        <div class="bg-surface-container border border-outline-variant p-2 rounded-lg">
-            <div class="text-[10px] text-gray-400 font-mono">TARGET LOCK</div>
-            <div id="target-lock-text" class="text-sm font-bold text-primary mt-1">WAITING (0.00)</div>
-        </div>
-        <!-- Structure Matrix -->
-<div class="bg-surface-container border border-outline-variant p-2 rounded-lg">
-    <div class="text-[10px] text-gray-400 font-mono flex justify-between">STRUCTURE <span id="structure-trend" class="text-[#4cd7f6] font-bold">RANGE</span></div>
-    <div class="flex justify-between mt-1 text-xs font-mono">
-        <span class="text-gray-500">BOS:</span>
-        <span id="structure-bos" class="font-bold text-white">NONE</span>
+        <div id="gate-reason" class="text-xs font-mono text-white mt-1">Awaiting liquidity sweep...</div>
     </div>
-</div>
-<div class="bg-surface-container border border-outline-variant p-2 rounded-lg">
-    <div class="text-[10px] text-gray-400 font-mono flex justify-between">SWINGS <span class="text-[9px]">H / L</span></div>
-    <div class="flex justify-between mt-1 text-xs font-mono">
-        <span id="swing-high-text" class="text-[#4cd7f6] font-bold">----.--</span>
-        <span id="swing-low-text" class="text-[#ffb4ab] font-bold">----.--</span>
+
+    <!-- Predator Eyes -->
+    <div class="bg-surface-container border border-[#ffc174]/30 p-2 rounded-lg">
+        <div class="text-[10px] text-[#ffc174] font-mono flex justify-between">PREDATOR ENTRY <span class="material-symbols-outlined text-[12px]">my_location</span></div>
+        <div id="predator-entry" class="text-sm font-bold text-white mt-1">----.--</div>
+    </div>
+    <div class="bg-surface-container border border-[#4cd7f6]/30 p-2 rounded-lg">
+        <div class="text-[10px] text-[#4cd7f6] font-mono flex justify-between">PREDATOR TP <span class="material-symbols-outlined text-[12px]">flag</span></div>
+        <div id="predator-tp" class="text-sm font-bold text-white mt-1">----.--</div>
+    </div>
+
+    <!-- Dynamic Target Lock -->
+    <div class="bg-surface-container border border-outline-variant p-2 rounded-lg col-span-2">
+        <div class="text-[10px] text-gray-400 font-mono flex justify-between">MACRO TARGET <span id="target-status" class="text-primary font-bold">LOCKED</span></div>
+        <div id="target-lock-text" class="text-sm font-bold text-primary mt-1">WAITING...</div>
     </div>
 </div>
 
-<!-- IGNITION BUTTON -->
-<div class="col-span-2 mt-2">
-    <div id="ignition-button" class="w-full py-3 rounded-lg border-2 border-gray-600 bg-[#1b2028] flex items-center justify-center gap-2 transition-all duration-300">
-        <span class="material-symbols-outlined text-gray-500">power_settings_new</span>
-        <span id="ignition-text" class="text-sm font-bold uppercase tracking-widest text-gray-500">IGNITION: WAITING</span>
+<!-- Overlord AI Briefing (Replaces the scrolling feed) -->
+<div class="mt-4 flex flex-col gap-2">
+    <div class="bg-surface-container border border-[#4cd7f6]/30 p-2 rounded-lg">
+        <div class="text-[9px] text-[#4cd7f6] font-bold font-mono tracking-widest">OBSERVATION</div>
+        <div id="ai-observation" class="text-xs text-gray-300 font-mono mt-1">Waiting for data...</div>
     </div>
-</div>
+    <div class="bg-surface-container border border-[#ffc174]/30 p-2 rounded-lg">
+        <div class="text-[9px] text-[#ffc174] font-bold font-mono tracking-widest">INFERENCE</div>
+        <div id="ai-inference" class="text-xs text-gray-300 font-mono mt-1">Analyzing market structure...</div>
+    </div>
+    <div class="bg-surface-container border border-gray-500 p-2 rounded-lg">
+        <div class="text-[9px] text-gray-400 font-bold font-mono tracking-widest">DECISION</div>
+        <div id="ai-decision" class="text-sm font-bold text-white mt-1">WAIT</div>
     </div>
 </div>
 <!-- Right Column: PREDATOR AI FEED (Cognitive Terminal Window) -->
