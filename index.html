@@ -162,47 +162,91 @@
         </div>
     </div>
 
-    <!-- Bottom Grid: Execution & Predator Eyes -->
+    <!-- Bottom Grid: Liquidity Matrix & Execution -->
 <div class="grid grid-cols-2 gap-2 w-full mt-4 z-10">
-    <!-- Execution Gate -->
-    <div class="bg-surface-container border border-outline-variant p-2 rounded-lg col-span-2">
-        <div class="text-[10px] text-gray-400 font-mono flex justify-between">
-            EXECUTION GATE
-            <span id="gate-status" class="text-error font-bold animate-pulse">SCANNING</span>
+    
+    <!-- 1. Liquidity Matrix -->
+    <div class="col-span-2 bg-surface-container border border-outline-variant rounded-lg p-3">
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] text-gray-400 font-mono tracking-widest">LIQUIDITY MATRIX</span>
+            <span id="macro-state-text" class="text-[10px] text-primary font-bold">HIBERNATION</span>
         </div>
-        <div id="gate-reason" class="text-xs font-mono text-white mt-1">Awaiting liquidity sweep...</div>
+        
+        <!-- Buyside -->
+        <div class="flex justify-between items-center py-1 border-b border-white/5">
+            <span class="text-xs text-[#4cd7f6] font-mono">BUYSIDE (PDH)</span>
+            <div class="flex gap-3 text-xs font-mono">
+                <span id="liq-buy-price" class="text-white font-bold">----.--</span>
+                <span id="liq-buy-dist" class="text-[#4cd7f6] w-16 text-right">--.-- pts</span>
+            </div>
+        </div>
+        
+        <!-- Equilibrium -->
+        <div class="flex justify-between items-center py-1 border-b border-white/5">
+            <span class="text-xs text-gray-400 font-mono">EQUILIBRIUM (VWAP)</span>
+            <div class="flex gap-3 text-xs font-mono">
+                <span id="liq-eq-price" class="text-white font-bold">----.--</span>
+                <span id="liq-eq-dist" class="text-gray-400 w-16 text-right">--.-- pts</span>
+            </div>
+        </div>
+        
+        <!-- Sellside -->
+        <div class="flex justify-between items-center py-1">
+            <span class="text-xs text-[#ffb4ab] font-mono">SELLSIDE (ASIAN LOW)</span>
+            <div class="flex gap-3 text-xs font-mono">
+                <span id="liq-sell-price" class="text-white font-bold">----.--</span>
+                <span id="liq-sell-dist" class="text-[#ffb4ab] w-16 text-right">--.-- pts</span>
+            </div>
+        </div>
     </div>
 
-    <!-- Predator Eyes -->
-    <div class="bg-surface-container border border-[#ffc174]/30 p-2 rounded-lg">
-        <div class="text-[10px] text-[#ffc174] font-mono flex justify-between">PREDATOR ENTRY <span class="material-symbols-outlined text-[12px]">my_location</span></div>
-        <div id="predator-entry" class="text-sm font-bold text-white mt-1">----.--</div>
-    </div>
-    <div class="bg-surface-container border border-[#4cd7f6]/30 p-2 rounded-lg">
-        <div class="text-[10px] text-[#4cd7f6] font-mono flex justify-between">PREDATOR TP <span class="material-symbols-outlined text-[12px]">flag</span></div>
-        <div id="predator-tp" class="text-sm font-bold text-white mt-1">----.--</div>
+    <!-- 2. Radar Checklist (Moved into a compact strip) -->
+    <div class="col-span-2 flex justify-around bg-surface-container-high rounded-lg p-2 border border-outline-variant/30 text-[10px] font-mono">
+        <span class="text-gray-400">CHECKLIST:</span>
+        <span class="text-gray-500 font-bold" id="check-sweep">⏳ SWEEP</span>
+        <span class="text-gray-500 font-bold" id="check-disp">⏳ DISP</span>
+        <span class="text-gray-500 font-bold" id="check-fvg">⏳ FVG</span>
     </div>
 
-    <!-- Dynamic Target Lock -->
-    <div class="bg-surface-container border border-outline-variant p-2 rounded-lg col-span-2">
-        <div class="text-[10px] text-gray-400 font-mono flex justify-between">MACRO TARGET <span id="target-status" class="text-primary font-bold">LOCKED</span></div>
-        <div id="target-lock-text" class="text-sm font-bold text-primary mt-1">WAITING...</div>
+    <!-- 3. Execution Deck -->
+    <div id="execution-deck" class="col-span-2 bg-[#1b2028] border border-gray-600 rounded-lg p-3 transition-all duration-300">
+        <div class="flex justify-between items-center mb-2">
+            <span class="text-[10px] text-gray-400 font-mono">PREDATOR EXECUTION</span>
+            <span id="exec-grade" class="text-[10px] text-orange-400 font-bold bg-orange-400/10 px-2 py-0.5 rounded">SCANNING...</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-center">
+            <div>
+                <div class="text-[9px] text-gray-500 font-mono">ENTRY</div>
+                <div id="exec-entry" class="text-sm font-bold text-white font-mono mt-1">----.--</div>
+            </div>
+            <div class="border-x border-gray-700">
+                <div class="text-[9px] text-gray-500 font-mono">STOP LOSS</div>
+                <div id="exec-sl" class="text-sm font-bold text-[#ffb4ab] font-mono mt-1">----.--</div>
+            </div>
+            <div>
+                <div class="text-[9px] text-gray-500 font-mono">TARGET</div>
+                <div id="exec-tp" class="text-sm font-bold text-[#4cd7f6] font-mono mt-1">----.--</div>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Overlord AI Briefing (Replaces the scrolling feed) -->
+<!-- Overlord AI Briefing -->
 <div class="mt-4 flex flex-col gap-2">
-    <div class="bg-surface-container border border-[#4cd7f6]/30 p-2 rounded-lg">
-        <div class="text-[9px] text-[#4cd7f6] font-bold font-mono tracking-widest">OBSERVATION</div>
-        <div id="ai-observation" class="text-xs text-gray-300 font-mono mt-1">Waiting for data...</div>
+    <div class="bg-surface-container border border-[#4cd7f6]/30 p-3 rounded-lg relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-1 h-full bg-[#4cd7f6]"></div>
+        <div class="text-[9px] text-[#4cd7f6] font-bold font-mono tracking-widest pl-2">OBSERVATION</div>
+        <div id="ai-observation" class="text-xs text-gray-300 font-mono mt-1 pl-2">Waiting for data...</div>
     </div>
-    <div class="bg-surface-container border border-[#ffc174]/30 p-2 rounded-lg">
-        <div class="text-[9px] text-[#ffc174] font-bold font-mono tracking-widest">INFERENCE</div>
-        <div id="ai-inference" class="text-xs text-gray-300 font-mono mt-1">Analyzing market structure...</div>
+    <div class="bg-surface-container border border-[#ffc174]/30 p-3 rounded-lg relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-1 h-full bg-[#ffc174]"></div>
+        <div class="text-[9px] text-[#ffc174] font-bold font-mono tracking-widest pl-2">INFERENCE</div>
+        <div id="ai-inference" class="text-xs text-gray-300 font-mono mt-1 pl-2">Analyzing market structure...</div>
     </div>
-    <div class="bg-surface-container border border-gray-500 p-2 rounded-lg">
-        <div class="text-[9px] text-gray-400 font-bold font-mono tracking-widest">DECISION</div>
-        <div id="ai-decision" class="text-sm font-bold text-white mt-1">WAIT</div>
+    <div class="bg-surface-container border border-gray-500 p-3 rounded-lg relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-1 h-full bg-gray-500"></div>
+        <div class="text-[9px] text-gray-400 font-bold font-mono tracking-widest pl-2">DECISION</div>
+        <div id="ai-decision" class="text-sm font-bold text-white mt-1 pl-2">WAIT</div>
     </div>
 </div>
 
